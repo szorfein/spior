@@ -1,4 +1,5 @@
 require_relative 'options'
+require_relative 'install'
 
 module Spior
   class Runner
@@ -7,6 +8,9 @@ module Spior
     end
 
     def run
+      if @options.install then
+        Spior::Install::dependencies
+      end
     end
   end
 end

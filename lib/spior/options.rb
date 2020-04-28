@@ -2,8 +2,10 @@ require 'optparse'
 
 module Spior
   class Options
+    attr_reader :install
 
     def initialize(argv)
+      @install = false
       parse(argv)
     end
 
@@ -12,6 +14,9 @@ module Spior
     def parse(argv)
       OptionParser.new do |opts|
 
+        opts.on("-i", "--install", "Install dependencies") do
+          @install = true
+        end
         opts.on("-h", "--help", "Show this message") do
           puts opts
           exit
