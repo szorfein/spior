@@ -1,0 +1,6 @@
+#!/usr/bin/env ruby
+
+require 'spior/runner'
+
+runner = Spior::Runner.new(ARGV)
+runner.run
