@@ -1,0 +1,20 @@
+User tor
+PIDFile /run/tor/tor.pid
+DataDirectory /var/lib/tor/data
+
+Log notice stdout
+
+GeoIPExcludeUnknown 1
+
+## Torified DNS
+DNSPort 127.0.0.1:9061
+AutomapHostsOnResolve 1
+AutomapHostsSuffixes .exit,.onion
+
+SocksPort 9050
+
+VirtualAddrNetworkIPv4 10.192.0.0/10
+TransPort 9040 IsolateClientAddr IsolateClientProtocol IsolateDestAddr IsolateDestPort
+
+TestSocks 1
+MaxCircuitDirtiness 600
