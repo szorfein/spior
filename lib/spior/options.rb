@@ -3,9 +3,11 @@ require 'optparse'
 module Spior
   class Options
     attr_reader :install
+    attr_reader :copy
 
     def initialize(argv)
       @install = false
+      @copy = false
       parse(argv)
     end
 
@@ -17,6 +19,11 @@ module Spior
         opts.on("-i", "--install", "Install dependencies") do
           @install = true
         end
+
+        opts.on("-c", "--copy", "Copy config files") do
+          @copy = true
+        end
+
         opts.on("-h", "--help", "Show this message") do
           puts opts
           exit

@@ -11,6 +11,10 @@ module Spior
       if @options.install then
         Spior::Install::dependencies
       end
+
+      if @options.copy then
+        Spior::Install::config_files
+      end
     end
   end
 end
