@@ -1,4 +1,5 @@
 require 'optparse'
+require_relative 'status'
 
 module Spior
   class Options
@@ -22,6 +23,10 @@ module Spior
 
         opts.on("-c", "--copy", "Copy config files") do
           @copy = true
+        end
+
+        opts.on("-s", "--status", "Look infos about your current ip") do
+          Spior::Status::info
         end
 
         opts.on("-h", "--help", "Show this message") do

@@ -39,12 +39,10 @@ module Spior
         choice = gets.chomp
         if choice =~ /y|Y/ then
           backup_file(target)
-          puts "copy file #{@config_file} at #{target}"
-          system("sudo cp -a #{@config_file} #{target}")
+          add_file target
         end
       else
-        puts "copy file #{@config_file} at #{target}"
-        system("sudo cp -a #{@config_file} #{target}")
+        add_file target
       end
     end
 
@@ -53,7 +51,7 @@ module Spior
       sha256conf = Digest::SHA256.file @config_file
       sha256target = Digest::SHA256.file target
       if sha256conf === sha256target then
-        Msg.p "file #{target} alrealy exist, skip"
+        Msg.p "File #{target} alrealy exist, skip"
         return true
       end
       return false
@@ -64,6 +62,11 @@ module Spior
       backup = target + ".backup-" + d.strftime('%b-%d_%I-%M')
       system("sudo cp -a #{target} #{backup}")
       puts "Renamed file #{backup}"
+    end
+
+    def self.add_file(target)
+      system("sudo cp -a #{@config_file} #{target}")
+      Msg.p "File #{@config_file} has been successfully copied at #{target}"
     end
   end
 end

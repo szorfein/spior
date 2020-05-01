@@ -2,7 +2,7 @@ Gem::Specification.new do |s|
   s.name = "spior"
   s.summary = "A tool to make TOR your default gateway"
   s.description = File.read(File.join(File.dirname(__FILE__), "README.md"))
-  s.version = "0.0.1"
+  s.version = "0.0.2"
   s.requirements << 'tor'
   s.requirements << 'sudo'
   s.requirements << 'iptables'

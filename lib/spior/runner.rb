@@ -13,7 +13,6 @@ module Spior
         Msg.head
         Spior::Install::dependencies
       end
-
       if @options.copy then
         Msg.head
         Spior::Install::config_files
