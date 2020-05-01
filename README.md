@@ -1,6 +1,6 @@
 # spior
-(Spider|Tor). A tool to make TOR your default gateway and randomize your hardware (MAC).  
-**(still under development !)**
+(Spider|Tor). A tool to make TOR your default gateway and randomize your hardware (MAC). 
+**still under development !**
 
 ## Install
 Spior is cryptographically signed, so add my public key (if you haven’t already) as a trusted certificate.

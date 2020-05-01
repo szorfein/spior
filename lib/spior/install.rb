@@ -3,6 +3,7 @@
 require 'pathname'
 require 'date'
 require 'digest'
+require_relative 'msg'
 
 module Spior
   class Install
@@ -52,7 +53,7 @@ module Spior
       sha256conf = Digest::SHA256.file @config_file
       sha256target = Digest::SHA256.file target
       if sha256conf === sha256target then
-        puts "file #{target} alrealy exist, skip"
+        Msg.p "file #{target} alrealy exist, skip"
         return true
       end
       return false
