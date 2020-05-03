@@ -3,12 +3,12 @@ require_relative 'status'
 
 module Spior
   class Options
-    attr_reader :install
-    attr_reader :copy
+    attr_reader :install , :copy, :mac , :interface
 
     def initialize(argv)
       @install = false
       @copy = false
+      @mac = false
       parse(argv)
     end
 
@@ -23,6 +23,14 @@ module Spior
 
         opts.on("-c", "--copy", "Copy config files") do
           @copy = true
+        end
+
+        opts.on("-m", "--mac", "Change your mac") do
+          @mac = true
+        end
+
+        opts.on("-c NAME", "--card NAME", "Network card to change, optionnal") do |net|
+          @interface = net
         end
 
         opts.on("-s", "--status", "Look infos about your current ip") do

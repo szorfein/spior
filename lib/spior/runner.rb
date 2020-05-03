@@ -1,6 +1,7 @@
 require_relative 'options'
 require_relative 'install'
 require_relative 'copy'
+require_relative 'mac'
 require_relative 'msg'
 
 module Spior
@@ -17,6 +18,10 @@ module Spior
       if @options.copy then
         Msg.head
         Spior::Copy::config_files
+      end
+      if @options.mac then
+        Msg.head
+        Spior::MAC::randomize(@options.interface)
       end
     end
   end
