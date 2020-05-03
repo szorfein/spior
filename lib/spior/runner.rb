@@ -1,5 +1,6 @@
 require_relative 'options'
 require_relative 'install'
+require_relative 'copy'
 require_relative 'msg'
 
 module Spior
@@ -15,7 +16,7 @@ module Spior
       end
       if @options.copy then
         Msg.head
-        Spior::Install::config_files
+        Spior::Copy::config_files
       end
     end
   end

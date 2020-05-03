@@ -1,14 +1,19 @@
 #!/usr/bin/env ruby
 
 require 'pathname'
-require 'date'
-require 'digest'
 require_relative 'msg'
 
 module Spior
   class Install
 
     def self.dependencies
+      base_packages
+      pkg_mac
+    end
+
+    private
+
+    def self.base_packages
       if Pathname.new("/usr/bin/emerge")
         puts "Install with emerge..."
         system('sudo emerge -av --changed-use tor iptables')
@@ -23,50 +28,32 @@ module Spior
       end
     end
 
-    def self.config_files
-      copy_file("torrc", "/etc/tor/torrc")
-      copy_file("resolv.conf", "/etc/resolv.conf")
-      copy_file("ipt_mod.conf", "/etc/modules-load.d/ipt_mod.conf")
-    end
-
-    private
-
-    def self.copy_file(conf, target)
-      @config_file = "conf/#{conf}"
-      return if check_hash(target)
-      if File.exist? target then
-        print "Target #{target} exist, backup and replace? [N/y] "
+    def self.pkg_mac
+      pkg_name="deceitmac"
+      if File.exist?("/usr/local/bin/#{pkg_name}")
+        print "Target #{pkg_name} exist, update? [N/y] "
         choice = gets.chomp
         if choice =~ /y|Y/ then
-          backup_file(target)
-          add_file target
+          puts "Update #{pkg_name}..."
+          build_pkg(pkg_name)
         end
       else
-        add_file target
+        puts "Install #{pkg_name}..."
+        build_pkg(pkg_name)
       end
     end
 
-    def self.check_hash(target)
-      return unless File.exist? target
-      sha256conf = Digest::SHA256.file @config_file
-      sha256target = Digest::SHA256.file target
-      if sha256conf === sha256target then
-        Msg.p "File #{target} alrealy exist, skip"
-        return true
-      end
-      return false
+    def self.build_pkg(name)
+      system("rm -rf /tmp/#{name}*")
+      system("curl -L -o /tmp/#{name}.tar.gz https://github.com/szorfein/#{name}/archive/master.tar.gz")
+      Dir.chdir("/tmp")
+      system("tar xvf #{name}.tar.gz")
+      Dir.chdir("#{name}-master")
+      system("sudo make install")
+      Msg.p "pkg #{name} installed"
+    rescue => e
+      Msg.err e
     end
 
-    def self.backup_file(target)
-      d = DateTime.now
-      backup = target + ".backup-" + d.strftime('%b-%d_%I-%M')
-      system("sudo cp -a #{target} #{backup}")
-      puts "Renamed file #{backup}"
-    end
-
-    def self.add_file(target)
-      system("sudo cp -a #{@config_file} #{target}")
-      Msg.p "File #{@config_file} has been successfully copied at #{target}"
-    end
   end
 end
