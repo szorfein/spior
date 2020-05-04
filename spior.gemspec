@@ -3,8 +3,7 @@ Gem::Specification.new do |s|
 
   s.summary = "A tool to make TOR your default gateway and randomize your hardware"
   s.description = <<-EOF 
-    A tool to make TOR your default gateway and randomize your hardware
-    Status: not yet functionnal, please wait for the next releases !"
+    A tool to make TOR your default gateway and randomize your hardware.
   EOF
 
   s.metadata = {
@@ -13,7 +12,7 @@ Gem::Specification.new do |s|
     "wiki_uri" => "https://github.com/szorfein/spior"
   }
 
-  s.version = "0.0.4"
+  s.version = "0.0.5"
   s.requirements << 'tor'
   s.requirements << 'sudo'
   s.requirements << 'iptables'

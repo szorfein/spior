@@ -1,5 +1,3 @@
-#!/usr/bin/env ruby
-
 require 'pathname'
 require 'date'
 require 'digest'
