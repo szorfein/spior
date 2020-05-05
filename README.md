@@ -24,12 +24,12 @@ Please, post an issue if your distro linux fail.
 ### Examples
 To change the MAC address for eth0
 
-    $ spior -c eth0 -m
+    $ spior -n eth0 -m
 
 Redirect traffic through TOR
 
     $ spior -t
-    $ spior -t -c eth0
+    $ spior -t -n eth0
 
 Look informations about your current ip address
 

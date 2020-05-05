@@ -1,5 +1,6 @@
 require 'interfacez'
 require_relative 'tor'
+require_relative 'copy'
 require_relative 'msg'
 
 module Spior
@@ -21,15 +22,30 @@ module Spior
       drop_all
     end
 
+    def self.flush_rules
+      select_cmd
+      ipt "-F"
+      ipt "-X"
+      ipt "-t nat -F"
+      ipt "-t nat -X"
+      ipt "-t mangle -F"
+      ipt "-t mangle -X"
+    end
+
     private
 
     def self.initialize(interface)
+      check_dep
       @lo = Interfacez.loopback
       @lo_addr = Interfacez.ipv4_address_of(@lo)
       @tor = Spior::Tor.new
       @non_tor = ["#{@lo_addr}/8", "10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16"]
       @incoming = interface
       @incoming_addr = Interfacez.ipv4_address_of(@incoming)
+    end
+
+    def self.check_dep
+      Spior::Copy::config_files
     end
 
     def self.select_cmd
@@ -44,16 +60,6 @@ module Spior
     def self.ipt(line)
       system("#{@i} #{line}")
       #puts "added - #{@i} #{line}"
-    end
-
-    def self.flush_rules
-      puts "flush"
-      ipt "-F"
-      ipt "-X"
-      ipt "-t nat -F"
-      ipt "-t nat -X"
-      ipt "-t mangle -F"
-      ipt "-t mangle -X"
     end
 
     def self.drop_all

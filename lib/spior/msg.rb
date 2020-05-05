@@ -12,4 +12,10 @@ module Msg
   def self.err(text)
     puts Rainbow("[").red + Rainbow("-").white + Rainbow("]").red + " " + text
   end
+
+  def self.report(text)
+    puts ""
+    self.err text
+    puts "Please, report this issue at https://github.com/szorfein/spior/issues"
+  end
 end

@@ -16,12 +16,16 @@ module Spior
 
     def self.copy_file(conf, target)
       @config_file = "conf/#{conf}"
-      return if check_hash(target)
+      return if check_hash(@config_file, target)
       if File.exist? target then
-        print "Target #{target} exist, backup and replace? [N/y] "
-        choice = gets.chomp
-        if choice =~ /y|Y/ then
-          backup_file(target)
+        if not backup_exist target
+          print "Target #{target} exist, backup and replace? [N/y] "
+          choice = gets.chomp
+          if choice =~ /y|Y/ then
+            backup_file(target)
+            add_file target
+          end
+        else
           add_file target
         end
       else
@@ -29,18 +33,19 @@ module Spior
       end
     end
 
-    def self.check_hash(target)
+    def self.check_hash(src, target)
       return unless File.exist? target
-      sha256conf = Digest::SHA256.file @config_file
+      sha256conf = Digest::SHA256.file src
       sha256target = Digest::SHA256.file target
       if sha256conf === sha256target then
-        Msg.p "File #{target} alrealy exist, skip"
+        Msg.p "File #{src} alrealy exist, skip"
         return true
       end
       return false
     end
 
     def self.backup_file(target)
+      return if check_hash(target, target + ".backup-*")
       d = DateTime.now
       backup = target + ".backup-" + d.strftime('%b-%d_%I-%M')
       system("sudo cp -a #{target} #{backup}")
@@ -50,6 +55,11 @@ module Spior
     def self.add_file(target)
       system("sudo cp -a #{@config_file} #{target}")
       Msg.p "File #{@config_file} has been successfully copied at #{target}"
+    end
+
+    def self.backup_exist(target)
+      backup=`ls #{target}.backup-* | head -n 1`.chomp
+      check_hash(target, backup)
     end
   end
 end

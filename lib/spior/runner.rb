@@ -17,9 +17,6 @@ module Spior
       if @options.install then
         Msg.head
         Spior::Install::dependencies
-      end
-      if @options.copy then
-        Msg.head
         Spior::Copy::config_files
       end
       if @options.mac then

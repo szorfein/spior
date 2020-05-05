@@ -1,4 +1,5 @@
 require 'nomansland'
+require 'tty-which'
 require_relative 'msg'
 
 module Spior
@@ -12,21 +13,23 @@ module Spior
     private
 
     def self.base_packages
-      case Nomansland::installer?
-      when :emerge
-        system('sudo emerge -av --changed-use tor iptables')
-      when :pacman
-        system('sudo pacman -S --needed tor iptables')
-      when :yum
-        system('sudo yum install tor iptables')
-      else
-        system('sudo apt-get tor iptables')
+      if not TTY::Which.exist?('iptables') or not TTY::Which.exist?('tor')
+        case Nomansland::installer?
+        when :emerge
+          system('sudo emerge -av --changed-use tor iptables')
+        when :pacman
+          system('sudo pacman -S --needed tor iptables')
+        when :yum
+          system('sudo yum install tor iptables')
+        else
+          system('sudo apt-get tor iptables')
+        end
       end
     end
 
     def self.pkg_mac
       pkg_name="deceitmac"
-      if File.exist?("/usr/local/bin/#{pkg_name}")
+      if TTY::Which.exist?(pkg_name)
         print "Target #{pkg_name} exist, update? [N/y] "
         choice = gets.chomp
         if choice =~ /y|Y/ then

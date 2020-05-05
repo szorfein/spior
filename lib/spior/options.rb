@@ -1,13 +1,13 @@
 require 'optparse'
 require_relative 'status'
+require_relative 'clear'
 
 module Spior
   class Options
-    attr_reader :install , :copy, :mac , :interface , :tor
+    attr_reader :install , :mac , :interface , :tor
 
     def initialize(argv)
       @install = false
-      @copy = false
       @mac = false
       @tor = false
       parse(argv)
@@ -17,16 +17,11 @@ module Spior
 
     def parse(argv)
       OptionParser.new do |opts|
-
         opts.on("-i", "--install", "Install dependencies") do
           @install = true
         end
 
-        opts.on("-c", "--copy", "Copy config files") do
-          @copy = true
-        end
-
-        opts.on("-c", "--card NAME", "The name of the target network card") do |net|
+        opts.on("-n", "--net-card NAME", "The name of the target network card") do |net|
           @interface = net
         end
 
@@ -36,6 +31,10 @@ module Spior
 
         opts.on("-t", "--tor", "Redirect traffic through TOR") do
           @tor = true
+        end
+
+        opts.on("-c", "--clear", "Clear iptables rules and restore files") do
+          Spior::Clear::all
         end
 
         opts.on("-s", "--status", "Look infos about your current ip") do

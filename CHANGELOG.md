@@ -1,3 +1,14 @@
+## 0.0.7, release 2020-05-05
+* Execute the option -t|--tor verify if config files are present.
+* Correct --copy, does not make more than one backup of the same file.
+* Correct --install, do not check for reinstall package if they exist.
+* --clear restore config files
+* --clear tries to restore the old rules if he finds them.
+* New option -c|--clear
+* Remove option --copy, it is start with --install
+* Change option --card with -n|--net-card
+* Add the Gem tty-which as dependencies
+
 ## 0.0.6, release 2020-05-04
 * README, Add examples
 * lib/spior/iptables - rename var input incoming
