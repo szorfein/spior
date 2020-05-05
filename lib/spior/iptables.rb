@@ -1,4 +1,5 @@
 require 'interfacez'
+require_relative 'tor'
 require_relative 'msg'
 
 module Spior
@@ -15,8 +16,9 @@ module Spior
       dns
       nat
       input
-      output
       forward
+      output
+      drop_all
     end
 
     private
@@ -24,13 +26,10 @@ module Spior
     def self.initialize(interface)
       @lo = Interfacez.loopback
       @lo_addr = Interfacez.ipv4_address_of(@lo)
-      @tor_dns = 9061
-      @trans_port = 9040
-      @tor_uid = `id -u tor 2>&1 | grep "^[0-9]*"`.chomp
-      @virt_addr= "10.192.0.0/10"
+      @tor = Spior::Tor.new
       @non_tor = ["#{@lo_addr}/8", "10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16"]
-      @input = interface
-      @input_addr = Interfacez.ipv4_address_of(@input)
+      @incoming = interface
+      @incoming_addr = Interfacez.ipv4_address_of(@incoming)
     end
 
     def self.select_cmd
@@ -43,7 +42,8 @@ module Spior
     end
 
     def self.ipt(line)
-      system("#{@i} #{line}") 
+      system("#{@i} #{line}")
+      #puts "added - #{@i} #{line}"
     end
 
     def self.flush_rules
@@ -54,6 +54,9 @@ module Spior
       ipt "-t nat -X"
       ipt "-t mangle -F"
       ipt "-t mangle -X"
+    end
+
+    def self.drop_all
       ipt "-P INPUT DROP"
       ipt "-P FORWARD DROP"
       ipt "-P OUTPUT DROP"
@@ -110,22 +113,23 @@ module Spior
       ipt "-A INPUT -p icmp -m limit --limit  1/s --limit-burst 1 -j ACCEPT"
       ipt "-A INPUT -p icmp -m limit --limit 1/s --limit-burst 1 -j LOG --log-prefix PING-DROP:"
       ipt "-A INPUT -p icmp -j DROP"
+      ipt "-A OUTPUT -p icmp -j ACCEPT"
     end
 
     def self.dns
       puts "dns"
-      ipt "-t nat -A PREROUTING ! -i #{@lo} -p udp -m udp --dport 53 -j REDIRECT --to-ports #{@tor_dns}"
-      ipt "-t nat -A OUTPUT -p udp -m udp --dport 53 -j REDIRECT --to-ports #{@tor_dns}"
-      ipt "-t nat -A OUTPUT -p tcp -m tcp --dport 53 -j REDIRECT --to-ports #{@tor_dns}"
+      ipt "-t nat -A PREROUTING ! -i #{@lo} -p udp -m udp --dport 53 -j REDIRECT --to-ports #{@tor.dns}"
+      ipt "-t nat -A OUTPUT -p udp -m udp --dport 53 -j REDIRECT --to-ports #{@tor.dns}"
+      ipt "-t nat -A OUTPUT -p tcp -m tcp --dport 53 -j REDIRECT --to-ports #{@tor.dns}"
     end
 
     def self.nat
       puts "nat"
       # nat .onion addresses
-      ipt "-t nat -A OUTPUT -d #{@virt_addr} -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -j REDIRECT --to-ports #{@trans_port}"
+      ipt "-t nat -A OUTPUT -d #{@tor.virt_addr} -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -j REDIRECT --to-ports #{@tor.trans_port}"
               
       # Don't nat the Tor process, the loopback, or the local network
-      ipt "-t nat -A OUTPUT -m owner --uid-owner #{@tor_uid} -j RETURN"
+      ipt "-t nat -A OUTPUT -m owner --uid-owner #{@tor.uid} -j RETURN"
       ipt "-t nat -A OUTPUT -o #{@lo} -j RETURN"
               
       # Allow lan access for hosts in $non_tor
@@ -134,52 +138,45 @@ module Spior
       end
 
       # Redirects all other pre-routing and output to Tor's TransPort
-      ipt "-t nat -A OUTPUT -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -j REDIRECT --to-ports #{@trans_port}"
+      ipt "-t nat -A OUTPUT -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -j REDIRECT --to-ports #{@tor.trans_port}"
 
       # Redirects all other pre-routing and output to Tor's TransPort
-      ipt "-t nat -A OUTPUT -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -j REDIRECT --to-ports #{@trans_port}"
-              
-      # input
-      ipt "-A INPUT -m state --state ESTABLISHED -j ACCEPT"
-      ipt "-A INPUT -i #{@lo} -j ACCEPT"
-      
-      # output
-      ipt "-A OUTPUT -m owner --uid-owner #{@tor_uid} -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -m state --state NEW -j ACCEPT"
-
-      # Allow loopback output
-      ipt "-A OUTPUT -d #{@lo_addr}/32 -o #{@lo} -j ACCEPT"
-              
-      # tor transparent magic
-      ipt "-A OUTPUT -d #{@lo_addr}/32 -p tcp -m tcp --dport #{@trans_port} --tcp-flags FIN,SYN,RST,ACK SYN -j ACCEPT"
-
-      ipt "-t filter -A OUTPUT -p udp -j REJECT"
-      ipt "-t filter -A OUTPUT -p icmp -j REJECT"
+      ipt "-t nat -A OUTPUT -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -j REDIRECT --to-ports #{@tor.trans_port}"
     end
 
     def self.input
       puts "input"
-      ipt "-A INPUT -m conntrack --ctstate INVALID -j LOG --log-prefix \"DROP INVALID \" --log-ip-options --log-tcp-options"
-      ipt "-A INPUT -m conntrack --ctstate INVALID -j DROP"
-      ipt "-A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT"
-      ipt "-A INPUT -i #{@input} ! -s #{@input_addr} -j LOG --log-prefix \"SPOOFED PKT \""
-      ipt "-A INPUT -i #{@input} ! -s #{@input_addr} -j DROP"
-      # ACCEPT rules
-      ipt "-A INPUT -i #{@input} -p tcp -s #{@input_addr} --dport 22 -m conntrack --ctstate NEW -j ACCEPT"
-      
-      ipt "-A INPUT ! -i #{@lo} -j LOG --log-prefix \"DROP \" --log-ip-options --log-tcp-options"
+      ipt "-A INPUT -i #{@incoming} -p tcp -s #{@incoming_addr} --dport 22 -m conntrack --ctstate NEW -j ACCEPT"
+
+      # Allow loopback, rules
+      ipt "-A INPUT -m state --state ESTABLISHED -j ACCEPT"
       ipt "-A INPUT -i #{@lo} -j ACCEPT"
+      
+      # Allow DNS lookups from connected clients and internet access through tor.
+      ipt "-A INPUT -d #{@incoming_addr} -i #{@incoming} -p udp -m udp --dport #{@tor.dns} -j ACCEPT"
+      ipt "-A INPUT -d #{@incoming_addr} -i #{@incoming} -p tcp -m tcp --dport #{@tor.trans_port} --tcp-flags FIN,SYN,RST,ACK SYN -j ACCEPT"
+      
+      # Default
+      ipt "-A INPUT -j DROP"
     end
 
     def self.output
       puts "output"
       ipt "-A OUTPUT -m conntrack --ctstate INVALID -j LOG --log-prefix \"DROP INVALID \" --log-ip-options --log-tcp-options"
       ipt "-A OUTPUT -m conntrack --ctstate INVALID -j DROP"
-      ipt "-A OUTPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT"
+      ipt "-A OUTPUT -m state --state ESTABLISHED -j ACCEPT"
 
-      # ACCEPT rules
+      # output
+      ipt "-A OUTPUT -m owner --uid-owner #{@tor.uid} -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -m state --state NEW -j ACCEPT"
+
+      # Accept, allow loopback output
       ipt "-A OUTPUT -p tcp --dport 22 -m conntrack --ctstate NEW -j ACCEPT"
-      ipt "-A OUTPUT ! -o #{@lo} -j LOG --log-prefix \"DROP \" --log-ip-options --log-tcp-options"
-      ipt "-A OUTPUT -o #{@lo} -j ACCEPT"
+      ipt "-A OUTPUT -d #{@lo_addr}/32 -o #{@lo} -j ACCEPT"
+
+      # tor transparent magic
+      ipt "-A OUTPUT -d #{@lo_addr}/32 -p tcp -m tcp --dport #{@tor.trans_port} --tcp-flags FIN,SYN,RST,ACK SYN -j ACCEPT"
+
+      ipt "-A OUTPUT -j DROP"
     end
 
     def self.forward
@@ -187,8 +184,8 @@ module Spior
       ipt "-A FORWARD -m conntrack --ctstate INVALID -j LOG --log-prefix \"DROP INVALID \" --log-ip-options --log-tcp-options"
       ipt "-A FORWARD -m conntrack --ctstate INVALID -j DROP"
       ipt "-A FORWARD -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT"
-      ipt "-A FORWARD -i #{@input} ! -s #{@input_addr} -j LOG --log-prefix \"SPOOFED PKT \""
-      ipt "-A FORWARD -i #{@input} ! -s #{@input_addr} -j DROP"
+      ipt "-A FORWARD -i #{@incoming} ! -s #{@incoming_addr} -j LOG --log-prefix \"SPOOFED PKT \""
+      ipt "-A FORWARD -i #{@incoming} ! -s #{@incoming_addr} -j DROP"
     end
   end
 end

@@ -1,6 +1,4 @@
-#!/usr/bin/env ruby
-
-require 'pathname'
+require 'nomansland'
 require_relative 'msg'
 
 module Spior
@@ -14,16 +12,14 @@ module Spior
     private
 
     def self.base_packages
-      if Pathname.new("/usr/bin/emerge")
-        puts "Install with emerge..."
+      case Nomansland::installer?
+      when :emerge
         system('sudo emerge -av --changed-use tor iptables')
-
-      elsif Pathname.new("/usr/bin/pacman")
-        puts "Install with pacman..."
+      when :pacman
         system('sudo pacman -S --needed tor iptables')
-
-      elsif Pathname.new("/usr/bin/apt-get")
-        puts "Install with apt-get"
+      when :yum
+        system('sudo yum install tor iptables')
+      else
         system('sudo apt-get tor iptables')
       end
     end
@@ -54,6 +50,5 @@ module Spior
     rescue => e
       Msg.err e
     end
-
   end
 end

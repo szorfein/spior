@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
     "wiki_uri" => "https://github.com/szorfein/spior"
   }
 
-  s.version = "0.0.5"
+  s.version = "0.0.6"
   s.requirements << 'tor'
   s.requirements << 'sudo'
   s.requirements << 'iptables'
@@ -32,4 +32,5 @@ Gem::Specification.new do |s|
   s.signing_key = File.expand_path("~/.ssh/gem-private_key.pem") if $0 =~ /gem\z/
   s.add_runtime_dependency('rainbow', '3.0.0')
   s.add_runtime_dependency('interfacez', '1.0.3')
+  s.add_runtime_dependency('nomansland', '0.0.2')
 end

@@ -1,6 +1,5 @@
 # spior
-(Spider|Tor). A tool to make TOR your default gateway and randomize your hardware (MAC).  
-**Still under development !**
+(Spider|Tor) A tool to make TOR your default gateway and randomize your hardware (MAC).
 
 ## Install
 Spior is cryptographically signed, so add my public key (if you haven’t already) as a trusted certificate.
@@ -16,11 +15,25 @@ You can install all the dependencies with:
 
     $ spior --install
 
-Please, post an issue if your linux distribution fail.
+Please, post an issue if your distro linux fail.
 
 ## Usage
 
     $ spior -h
+
+### Examples
+To change the MAC address for eth0
+
+    $ spior -c eth0 -m
+
+Redirect traffic through TOR
+
+    $ spior -t
+    $ spior -t -c eth0
+
+Look informations about your current ip address
+
+    $ spior -s
 
 ## Left Over
 

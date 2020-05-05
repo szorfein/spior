@@ -1,3 +1,11 @@
+## 0.0.6, release 2020-05-04
+* README, Add examples
+* lib/spior/iptables - rename var input incoming
+* Remove unused rules for iptables (INPUT and OUTPUT)
+* Search tor-uid by distro (tested for gentoo,arch,debian,ubuntu)
+* Add class lib/spior/tor, to check variables and dependencies (later)
+* Add the Gem Nomansland as dependencies
+
 ## 0.0.5, release 2020-05-03
 * Spior can now redirect all the traffic through TOR
 * Add OptionParser -t|--tor
