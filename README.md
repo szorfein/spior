@@ -10,13 +10,6 @@ And install the gem
 
     $ gem install spior -P MediumSecurity
 
-## Dependencies
-You can install all the dependencies with:
-
-    $ spior --install
-
-Please, post an issue if your distro linux fail.
-
 ## Usage
 
     $ spior -h

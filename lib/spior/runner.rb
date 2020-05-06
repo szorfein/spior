@@ -21,6 +21,7 @@ module Spior
       end
       if @options.mac then
         Msg.head
+        Spior::Install::check_mac
         if not @network
           @network = Spior::Network.new(@options.interface)
         end
@@ -28,6 +29,8 @@ module Spior
       end
       if @options.tor then
         Msg.head
+        Spior::Install::check_base
+        Spior::Copy::config_files
         if not @network
           @network = Spior::Network.new(@options.interface)
         end

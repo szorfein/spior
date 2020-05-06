@@ -1,3 +1,6 @@
+## 0.0.8
+* Option -i|--install is optionnal, deps are checked during the execution 
+
 ## 0.0.7, release 2020-05-05
 * Execute the option -t|--tor verify if config files are present.
 * Correct --copy, does not make more than one backup of the same file.

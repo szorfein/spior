@@ -7,6 +7,14 @@ module Spior
 
     def self.dependencies
       base_packages
+      mac_update
+    end
+
+    def self.check_base
+      base_packages
+    end
+
+    def self.check_mac
       pkg_mac
     end
 
@@ -28,6 +36,13 @@ module Spior
     end
 
     def self.pkg_mac
+      pkg_name="deceitmac"
+      if not TTY::Which.exist?(pkg_name)
+        build_pkg(pkg_name)
+      end
+    end
+
+    def self.mac_update
       pkg_name="deceitmac"
       if TTY::Which.exist?(pkg_name)
         print "Target #{pkg_name} exist, update? [N/y] "

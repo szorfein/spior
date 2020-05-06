@@ -1,6 +1,5 @@
 require 'interfacez'
 require_relative 'tor'
-require_relative 'copy'
 require_relative 'msg'
 
 module Spior
@@ -35,7 +34,6 @@ module Spior
     private
 
     def self.initialize(interface)
-      check_dep
       @lo = Interfacez.loopback
       @lo_addr = Interfacez.ipv4_address_of(@lo)
       @tor = Spior::Tor.new
