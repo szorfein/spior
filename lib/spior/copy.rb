@@ -12,19 +12,19 @@ module Spior
       copy_file("ipt_mod.conf", "/etc/modules-load.d/ipt_mod.conf")
     end
 
+    def self.restore_files
+      backup_exist("/etc/tor/torrc")
+      backup_exist("/etc/resolv.conf")
+    end
+
     private
 
     def self.copy_file(conf, target)
       @config_file = "conf/#{conf}"
       return if check_hash(@config_file, target)
       if File.exist? target then
-        if not backup_exist target
-          print "Target #{target} exist, backup and replace? [N/y] "
-          choice = gets.chomp
-          if choice =~ /y|Y/ then
-            backup_file(target)
-            add_file target
-          end
+        if ! previous_copy target
+          backup_file(target)
         else
           add_file target
         end
@@ -33,19 +33,19 @@ module Spior
       end
     end
 
+    def self.previous_copy(target)
+      backup=`ls #{target}.backup-* | head -n 1`.chomp
+      return false if !File.exist?(backup)
+      check_hash(backup, target)
+    end
+
     def self.check_hash(src, target)
-      return unless File.exist? target
       sha256conf = Digest::SHA256.file src
       sha256target = Digest::SHA256.file target
-      if sha256conf === sha256target then
-        Msg.p "File #{src} alrealy exist, skip"
-        return true
-      end
-      return false
+      sha256conf === sha256target
     end
 
     def self.backup_file(target)
-      return if check_hash(target, target + ".backup-*")
       d = DateTime.now
       backup = target + ".backup-" + d.strftime('%b-%d_%I-%M')
       system("sudo cp -a #{target} #{backup}")
@@ -59,7 +59,14 @@ module Spior
 
     def self.backup_exist(target)
       backup=`ls #{target}.backup-* | head -n 1`.chomp
-      check_hash(target, backup)
+      if File.exist? backup
+        if ! check_hash(target, backup)
+          system("sudo cp -a #{backup} #{target}")
+          Msg.p "Restored #{backup}"
+        end
+      else
+        puts "No found previous backup for #{target}"
+      end
     end
   end
 end

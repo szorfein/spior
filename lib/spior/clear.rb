@@ -1,5 +1,6 @@
 require 'tty-which'
 require 'nomansland'
+require_relative 'copy'
 require_relative 'msg'
 
 module Spior
@@ -33,8 +34,7 @@ module Spior
     end
 
     def rez_configs
-      system("sudo cp -a /etc/resolv.conf.backup-* /etc/resolv.conf")
-      #system("sudo cp -a /etc/tor/torrc.backup-* /etc/tor/torrc")
+      Spior::Copy::restore_files
     end
   end
 end

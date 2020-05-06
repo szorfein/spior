@@ -58,13 +58,24 @@ module Spior
     end
 
     def self.build_pkg(name)
+      old_path = Dir.pwd
       system("rm -rf /tmp/#{name}*")
       system("curl -L -o /tmp/#{name}.tar.gz https://github.com/szorfein/#{name}/archive/master.tar.gz")
       Dir.chdir("/tmp")
       system("tar xvf #{name}.tar.gz")
       Dir.chdir("#{name}-master")
       system("sudo make install")
+      if TTY::Which.exist?('systemctl')
+        if Dir.exist?("/lib/systemd/system")
+          puts "lib/systemd"
+          system("sudo cp deceitmac@.service /lib/systemd/system/")
+        else
+          puts "/usr/lib/systemd"
+          system("sudo cp deceitmac@.service /usr/lib/systemd/system/")
+        end
+      end
       Msg.p "pkg #{name} installed"
+      Dir.chdir(old_path)
     rescue => e
       Msg.err e
     end
