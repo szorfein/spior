@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 
 require 'open-uri'
-require 'json'
 
 module Spior
   class Status
@@ -12,7 +11,7 @@ module Spior
       uri = URI.parse("https://ipleak.net/json")
       uri.open {|f|
         f.each_line {|line|
-          p line
+          p line.chomp.delete("/\",{}")
         }
       }
     end

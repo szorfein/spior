@@ -1,5 +1,7 @@
 ## 0.0.9
-* Correct path for config files
+* Add an option to reload TOR -r|--reload
+* Cleanup few characters from -s|--status
+* Correct path for search config files
 
 ## 0.0.8, release 2020-05-06
 * Always make a copy and replace original file, do not ask, the program is dependent of his config file for now.

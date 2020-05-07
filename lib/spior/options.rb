@@ -1,4 +1,5 @@
 require 'optparse'
+require_relative 'reload'
 require_relative 'status'
 require_relative 'clear'
 
@@ -17,7 +18,7 @@ module Spior
 
     def parse(argv)
       OptionParser.new do |opts|
-        opts.on("-i", "--install", "Install dependencies") do
+        opts.on("-i", "--install", "Install and update dependencies") do
           @install = true
         end
 
@@ -31,6 +32,10 @@ module Spior
 
         opts.on("-t", "--tor", "Redirect traffic through TOR") do
           @tor = true
+        end
+
+        opts.on("-r", "--reload", "Reload TOR to change your ip") do
+          Spior::Reload::tor
         end
 
         opts.on("-c", "--clear", "Clear iptables rules and restore files") do
