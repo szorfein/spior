@@ -7,9 +7,10 @@ module Spior
   class Copy
 
     def self.config_files
-      copy_file("torrc", "/etc/tor/torrc")
-      copy_file("resolv.conf", "/etc/resolv.conf")
-      copy_file("ipt_mod.conf", "/etc/modules-load.d/ipt_mod.conf")
+      @conf_dir = File.expand_path('../..' + '/conf', __dir__)
+      copy_file(@conf_dir + "/torrc", "/etc/tor/torrc")
+      copy_file(@conf_dir + "/resolv.conf", "/etc/resolv.conf")
+      copy_file(@conf_dir + "/ipt_mod.conf", "/etc/modules-load.d/ipt_mod.conf")
     end
 
     def self.restore_files
@@ -20,7 +21,7 @@ module Spior
     private
 
     def self.copy_file(conf, target)
-      @config_file = "conf/#{conf}"
+      @config_file = conf
       return if check_hash(@config_file, target)
       if File.exist? target then
         if ! previous_copy target
@@ -40,6 +41,7 @@ module Spior
     end
 
     def self.check_hash(src, target)
+      return if not File.exist?(target)
       sha256conf = Digest::SHA256.file src
       sha256target = Digest::SHA256.file target
       sha256conf === sha256target

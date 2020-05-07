@@ -1,3 +1,6 @@
+## 0.0.9
+* Correct path for config files
+
 ## 0.0.8, release 2020-05-06
 * Always make a copy and replace original file, do not ask, the program is dependent of his config file for now.
 * Correct install where Dir.chdir don't back to the previous location.
