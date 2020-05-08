@@ -1,4 +1,9 @@
-## 0.0.9
+## 0.1.0
+* New option -p|--persist, work with systemd for now
+* Remove duplicate code at lib/spior/mac.rb
+* Correct apt-get install
+
+## 0.0.9, release 2020-05-07
 * Add an option to reload TOR -r|--reload
 * Cleanup few characters from -s|--status
 * Correct path for search config files

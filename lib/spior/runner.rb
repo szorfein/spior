@@ -4,6 +4,7 @@ require_relative 'copy'
 require_relative 'mac'
 require_relative 'iptables'
 require_relative 'network'
+require_relative 'persist'
 require_relative 'msg'
 
 module Spior
@@ -35,6 +36,12 @@ module Spior
           @network = Spior::Network.new(@options.interface)
         end
         Spior::Iptables::tor(@network.card)
+      end
+      if @options.persist then
+        if not @network
+          @network = Spior::Network.new(@options.interface)
+        end
+        Spior::Persist::all(@network.card)
       end
     end
   end

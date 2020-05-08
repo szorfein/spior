@@ -5,12 +5,13 @@ require_relative 'clear'
 
 module Spior
   class Options
-    attr_reader :install , :mac , :interface , :tor
+    attr_reader :install , :mac , :interface , :tor , :persist
 
     def initialize(argv)
       @install = false
       @mac = false
       @tor = false
+      @persist = false
       parse(argv)
     end
 
@@ -44,6 +45,10 @@ module Spior
 
         opts.on("-s", "--status", "Look infos about your current ip") do
           Spior::Status::info
+        end
+
+        opts.on("-p", "--persist", "Active Spior at every boot.") do
+          @persist = true
         end
 
         opts.on("-h", "--help", "Show this message") do

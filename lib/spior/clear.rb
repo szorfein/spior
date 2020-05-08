@@ -24,7 +24,7 @@ module Spior
       elsif File.exist?("/etc/iptables.rules")
         ipt_restore "/etc/iptables.rules"
       else
-        Msg.report "Do not known where search you previous iptables rules"
+        Msg.p "I couldn't find any old rules for iptables to restore, skipping..."
       end
     end
 

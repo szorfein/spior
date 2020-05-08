@@ -18,6 +18,26 @@ module Spior
       backup_exist("/etc/resolv.conf")
     end
 
+    def self.search_systemd_dir
+      if Dir.exist?("/usr/lib/systemd/system")
+        @systemd_dir = '/usr/lib/systemd/system'
+      elsif Dir.exist?("/lib/systemd/system")
+        @systemd_dir = '/lib/systemd/system'
+      else
+        Msg.report "Directory systemd/system is no found on your system."
+        exit(-1)
+      end
+    end
+
+    def self.systemd_services
+      search_systemd_dir
+      case Nomansland::installer?
+      when :gentoo
+        Msg.p "Copy #{@conf_dir}/iptables.service"
+        copy_file(@conf_dir + "/iptables.service", @systemd_dir + "/iptables.service")
+      end
+    end
+
     private
 
     def self.copy_file(conf, target)

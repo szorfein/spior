@@ -30,7 +30,7 @@ module Spior
         when :yum
           system('sudo yum install tor iptables')
         else
-          system('sudo apt-get tor iptables')
+          system('sudo apt-get install tor iptables')
         end
       end
     end

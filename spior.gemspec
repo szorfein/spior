@@ -12,7 +12,7 @@ Gem::Specification.new do |s|
     "wiki_uri" => "https://github.com/szorfein/spior"
   }
 
-  s.version = "0.0.9"
+  s.version = "0.1.0"
   s.requirements << 'tor'
   s.requirements << 'sudo'
   s.requirements << 'iptables'
