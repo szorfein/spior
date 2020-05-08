@@ -1,4 +1,4 @@
-require 'pathname'
+require 'nomansland'
 require 'date'
 require 'digest'
 require_relative 'msg'
@@ -8,7 +8,7 @@ module Spior
 
     def self.config_files
       @conf_dir = File.expand_path('../..' + '/conf', __dir__)
-      copy_file(@conf_dir + "/torrc", "/etc/tor/torrc")
+      copy_torrc
       copy_file(@conf_dir + "/resolv.conf", "/etc/resolv.conf")
       copy_file(@conf_dir + "/ipt_mod.conf", "/etc/modules-load.d/ipt_mod.conf")
     end
@@ -46,11 +46,20 @@ module Spior
       if File.exist? target then
         if ! previous_copy target
           backup_file(target)
-        else
-          add_file target
-        end
+        end 
+        add_file target
       else
         add_file target
+      end
+    end
+
+    def self.copy_torrc
+      case Nomansland::distro?
+      when :archlinux
+        copy_file(@conf_dir + "/torrc/torrc_archlinux", "/etc/tor/torrc")
+      else
+        copy_file(@conf_dir + "/torrc/torrc_default", "/etc/tor/torrc")
+        Msg.report "If tor fail to start with the default torrc"
       end
     end
 

@@ -9,6 +9,7 @@ module Spior
 
     def all(card_name)
       @card_name = card_name
+      @services=[ "tor", "iptables", "deceitmac@" + @card_name ]
       search_for_systemd
     end
 
@@ -17,8 +18,7 @@ module Spior
     def search_for_systemd
       return if !TTY::Which.exist?('systemctl') 
       Spior::Copy::systemd_services
-      services=[ "tor", "iptables", "deceitmac@" + @card_name ]
-      services.each do |service|
+      @services.each do |service|
         Msg.p "Search for service #{service}..."
         system("if ! systemctl is-enabled #{service} ; then sudo systemctl enable #{service} ; fi")
       end

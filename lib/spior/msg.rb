@@ -13,9 +13,13 @@ module Msg
     puts Rainbow("[").red + Rainbow("-").white + Rainbow("]").red + " " + text
   end
 
+  def self.info(text)
+    puts Rainbow("-").blue + Rainbow("-").white + Rainbow("-").blue + " " + text + " " + Rainbow("-").blue + Rainbow("-").white + Rainbow("-").blue
+  end
+
   def self.report(text)
     puts ""
-    self.err text
+    info text
     puts "Please, report this issue at https://github.com/szorfein/spior/issues"
   end
 end

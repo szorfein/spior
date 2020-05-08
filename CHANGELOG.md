@@ -1,7 +1,9 @@
-## 0.1.0
-* New option -p|--persist, work with systemd for now
-* Remove duplicate code at lib/spior/mac.rb
-* Correct apt-get install
+## 0.1.0, release 2020-05-08
+* Will manage differents version of torrc, if your distro fail to start TOR, report an issue.
+* Ensure than TOR is start before proceed.
+* New option -p|--persist, work with systemd for now.
+* Remove duplicate code at lib/spior/mac.rb.
+* Correct apt-get install.
 
 ## 0.0.9, release 2020-05-07
 * Add an option to reload TOR -r|--reload
