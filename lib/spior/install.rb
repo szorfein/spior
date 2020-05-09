@@ -12,7 +12,6 @@ module Spior
 
     def self.check_base
       base_packages
-      verify_services
     end
 
     def self.check_mac
@@ -33,12 +32,6 @@ module Spior
         else
           system('sudo apt-get install tor iptables')
         end
-      end
-    end
-
-    def self.verify_services
-      if TTY::Which.exist?('systemctl')
-        system('if ! systemctl is-active tor ; then sudo systemctl start tor ; fi')
       end
     end
 

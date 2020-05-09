@@ -1,4 +1,4 @@
 build:
 	rm -f spior*.gem
 	gem build spior.gemspec
-	gem install spior-0.1.0.gem -P MediumSecurity
+	gem install spior-0.1.1.gem -P MediumSecurity

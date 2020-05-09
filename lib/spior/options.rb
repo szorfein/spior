@@ -2,6 +2,7 @@ require 'optparse'
 require_relative 'reload'
 require_relative 'status'
 require_relative 'clear'
+require_relative 'menu'
 
 module Spior
   class Options
@@ -51,13 +52,17 @@ module Spior
           @persist = true
         end
 
+        opts.on("-m", "--menu", "Display an interactive menu") do
+          Spior::Menu::run
+        end
+
         opts.on("-h", "--help", "Show this message") do
           puts opts
           exit
         end
 
         begin
-          argv = ["-h"] if argv.empty?
+          argv = ["-m"] if argv.empty?
           opts.parse!(argv)
         rescue OptionParser::ParseError => e
           STDERR.puts e.message, "\n", opts

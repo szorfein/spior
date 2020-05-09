@@ -1,3 +1,9 @@
+## 0.1.1, release 2020-05-09
+* The tor class now check for dependencies and service start|restart
+* Call Spior without arguments now display the interactive menu
+* New option -m|--menu
+* Reorder the spior.gemspec
+
 ## 0.1.0, release 2020-05-08
 * Will manage differents version of torrc, if your distro fail to start TOR, report an issue.
 * Ensure than TOR is start before proceed.
