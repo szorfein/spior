@@ -1,6 +1,7 @@
 require 'nomansland'
 require 'tty-which'
 require_relative 'msg'
+require_relative 'helpers'
 
 module Spior
   class Install
@@ -24,13 +25,17 @@ module Spior
       if not TTY::Which.exist?('iptables') or not TTY::Which.exist?('tor')
         case Nomansland::installer?
         when :emerge
-          system('sudo emerge -av --changed-use tor iptables')
+          emerge = Helpers::Exec.new("emerge -av --changed-use")
+          emerge.run("tor iptables")
         when :pacman
-          system('sudo pacman -S --needed tor iptables')
+          pacman = Helpers::Exec.new("pacman -S --needed")
+          pacman.run("tor iptables")
         when :yum
-          system('sudo yum install tor iptables')
+          yum = Helpers::Exec.new("yum install")
+          yum.run("tor iptables")
         else
-          system('sudo apt-get install tor iptables')
+          apt_get = Helpers::Exec.new("apt-get install")
+          apt_get.run("tor iptables iptables-persistent")
         end
       end
     end

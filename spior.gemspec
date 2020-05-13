@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = "spior"
-  s.version = "0.1.1"
+  s.version = "0.1.2"
   s.summary = "A tool to make TOR your default gateway and randomize your hardware"
   s.description = <<-EOF 
     A tool to make TOR your default gateway and randomize your hardware.
@@ -30,7 +30,6 @@ Gem::Specification.new do |s|
   s.signing_key = File.expand_path("~/.ssh/gem-private_key.pem") if $0 =~ /gem\z/
 
   s.requirements << 'tor'
-  s.requirements << 'sudo'
   s.requirements << 'iptables'
 
   s.required_ruby_version = '>=2.4'

@@ -2,11 +2,13 @@ require 'nomansland'
 require 'date'
 require 'digest'
 require_relative 'msg'
+require_relative 'helpers'
 
 module Spior
   class Copy
 
     def self.config_files
+      @cp = Helpers::Exec.new("cp -a")
       @conf_dir = File.expand_path('../..' + '/conf', __dir__)
       copy_torrc
       copy_file(@conf_dir + "/resolv.conf", "/etc/resolv.conf")
@@ -14,6 +16,7 @@ module Spior
     end
 
     def self.restore_files
+      @cp = Helpers::Exec.new("cp -a")
       backup_exist("/etc/tor/torrc")
       backup_exist("/etc/resolv.conf")
     end
@@ -30,6 +33,7 @@ module Spior
     end
 
     def self.systemd_services
+      @cp = Helpers::Exec.new("cp -a")
       search_systemd_dir
       case Nomansland::installer?
       when :gentoo
@@ -79,12 +83,12 @@ module Spior
     def self.backup_file(target)
       d = DateTime.now
       backup = target + ".backup-" + d.strftime('%b-%d_%I-%M')
-      system("sudo cp -a #{target} #{backup}")
+      @cp.run("#{target} #{backup}")
       puts "Renamed file #{backup}"
     end
 
     def self.add_file(target)
-      system("sudo cp -a #{@config_file} #{target}")
+      @cp.run("#{@config_file} #{target}")
       Msg.p "File #{@config_file} has been successfully copied at #{target}"
     end
 
@@ -92,7 +96,7 @@ module Spior
       backup=`ls #{target}.backup-* | head -n 1`.chomp
       if File.exist? backup
         if ! check_hash(target, backup)
-          system("sudo cp -a #{backup} #{target}")
+          @cp.run("#{backup} #{target}")
           Msg.p "Restored #{backup}"
         end
       else

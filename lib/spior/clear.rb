@@ -2,6 +2,7 @@ require 'tty-which'
 require 'nomansland'
 require_relative 'copy'
 require_relative 'msg'
+require_relative 'helpers'
 
 module Spior
   module Clear
@@ -30,7 +31,7 @@ module Spior
 
     def ipt_restore(path)
       puts "Restoring rules #{path}..."
-      system("sudo iptables-restore #{path}")
+      Helpers::Exec.new("iptables-restore").run("#{path}")
     end
 
     def rez_configs

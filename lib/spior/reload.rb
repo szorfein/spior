@@ -1,11 +1,12 @@
 require 'tty-which'
 require_relative 'msg'
+require_relative 'helpers'
 
 module Spior
   module Reload
     def self.tor
       if TTY::Which.exist?('systemctl')
-        system('sudo systemctl restart tor')
+        Helpers::Exec.new("systemctl").run("restart tor")
         Msg.p "ip changed"
       end
     end

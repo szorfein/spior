@@ -1,3 +1,9 @@
+## 0.1.2, release 2020-05-13
+* Add instructions for the persistent mode
+* Add dependency iptables-persistant for distro based on debian
+* Avoid to use sudo if no need
+* Add lib/spior/helpers
+
 ## 0.1.1, release 2020-05-09
 * The tor class now check for dependencies and service start|restart
 * Call Spior without arguments now display the interactive menu

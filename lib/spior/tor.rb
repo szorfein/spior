@@ -4,12 +4,14 @@ require 'tty-which'
 require_relative 'msg'
 require_relative 'install'
 require_relative 'copy'
+require_relative 'helpers'
 
 module Spior
   class Tor
     attr_accessor :dns, :uid, :trans_port, :virt_addr
 
     def initialize
+      @systemctl = Helpers::Exec.new("systemctl")
       check_deps
       @dns = search_dns
       @uid = search_uid
@@ -53,10 +55,10 @@ module Spior
         state = `systemctl is-active tor`.chomp
         if state == 'active'
           #puts "Restart tor"
-          system('sudo systemctl restart tor')
+          @systemctl.run('restart tor')
         else
           #puts "Start tor"
-          system('sudo systemctl start tor')
+          @systemctl.run('start tor')
         end
       else
         Msg.for_no_systemd

@@ -1,13 +1,13 @@
 require 'interfacez'
 require_relative 'tor'
 require_relative 'msg'
+require_relative 'helpers'
 
 module Spior
   class Iptables
 
     def self.tor(interface = false)
       initialize(interface)
-      select_cmd
       flush_rules
       bogus_tcp_flags
       bad_packets
@@ -22,7 +22,7 @@ module Spior
     end
 
     def self.flush_rules
-      select_cmd
+      @i = Helpers::Exec.new("iptables")
       ipt "-F"
       ipt "-X"
       ipt "-t nat -F"
@@ -46,17 +46,8 @@ module Spior
       Spior::Copy::config_files
     end
 
-    def self.select_cmd
-      id=`id -u`
-      if id == 0 then
-        @i = "iptables"
-      else
-        @i = "sudo iptables"
-      end
-    end
-
     def self.ipt(line)
-      system("#{@i} #{line}")
+      @i.run("#{line}")
       #puts "added - #{@i} #{line}"
     end
 

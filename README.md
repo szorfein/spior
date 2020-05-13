@@ -10,6 +10,13 @@ And install the gem
 
     $ gem install spior -P MediumSecurity
 
+To be able to use the `persist mode` (with systemd for now), the gem should be installed system-wide:  
++ For gentoo, a package is available on my repo [ninjatools](https://github.com/szorfein/ninjatools/tree/master/dev-ruby/spior).  
++ Arch seem to use [Quarry](https://wiki.archlinux.org/index.php/Ruby#Quarry).  
++ On distro based on debian, gem are installed system-wide.  
+
+If you can, i recommend that you create a package for your distribution.  
+
 ## Usage
 
     $ spior -h
