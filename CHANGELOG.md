@@ -1,3 +1,9 @@
+## 0.1.3, release 2020-05-14
+* Rename conf dir by ext
+* Clearing all codes about MAC
+* Remove deceitmac
+* Mac change and other randomize features will go on another gem amnesie
+
 ## 0.1.2, release 2020-05-13
 * Add instructions for the persistent mode
 * Add dependency iptables-persistant for distro based on debian

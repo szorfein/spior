@@ -20,16 +20,12 @@ module Spior
 
     def parse(argv)
       OptionParser.new do |opts|
-        opts.on("-i", "--install", "Install and update dependencies") do
+        opts.on("-i", "--install", "Check and install dependencies") do
           @install = true
         end
 
         opts.on("-n", "--net-card NAME", "The name of the target network card") do |net|
           @interface = net
-        end
-
-        opts.on("-m", "--mac", "Change your mac") do
-          @mac = true
         end
 
         opts.on("-t", "--tor", "Redirect traffic through TOR") do

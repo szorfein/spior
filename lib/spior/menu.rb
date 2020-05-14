@@ -1,5 +1,4 @@
 require_relative 'msg'
-require_relative 'mac'
 require_relative 'iptables'
 require_relative 'network'
 require_relative 'reload'
@@ -16,29 +15,25 @@ module Spior
         Msg.head
         puts %q{Please select an option:
 
-  1. Forge a new MAC address
-  2. Redirect traffic through tor
-  3. Reload tor and change your ip
-  4. Clear and restore your files
-  5. Check info on your current ip
-  6. Quit}
+  1. Redirect traffic through tor
+  2. Reload tor and change your ip
+  3. Clear and restore your files
+  4. Check info on your current ip
+  5. Quit}
 
         puts
         print ">> "
         case gets.chomp
           when '1'
             check_network
-            Spior::MAC::randomize(@network.card)
-          when '2'
-            check_network
             Spior::Iptables::tor(@network.card)
-          when '3'
+          when '2'
             Spior::Reload::tor
-          when '4'
+          when '3'
             Spior::Clear::all
-          when '5'
+          when '4'
             Spior::Status::info
-          when '6'
+          when '5'
             exit
         end
       end

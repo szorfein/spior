@@ -10,7 +10,7 @@ module Spior
 
     def all(card_name)
       @card_name = card_name
-      @services=[ "tor", "iptables", "deceitmac@" + @card_name ]
+      @services=[ "tor", "iptables" ]
       search_for_systemd
     end
 

@@ -22,7 +22,7 @@ module Spior
     private 
 
     def check_deps
-      Spior::Install::check_base
+      Spior::Install::check_deps
       Spior::Copy::config_files
       verify_service
     end

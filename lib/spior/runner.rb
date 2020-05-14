@@ -1,7 +1,6 @@
 require_relative 'options'
 require_relative 'install'
 require_relative 'copy'
-require_relative 'mac'
 require_relative 'iptables'
 require_relative 'network'
 require_relative 'persist'
@@ -17,16 +16,8 @@ module Spior
     def run
       if @options.install then
         Msg.head
-        Spior::Install::dependencies
+        Spior::Install::deps
         Spior::Copy::config_files
-      end
-      if @options.mac then
-        Msg.head
-        Spior::Install::check_mac
-        if not @network
-          @network = Spior::Network.new(@options.interface)
-        end
-        Spior::MAC::randomize(@network.card)
       end
       if @options.tor then
         Msg.head

@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name = "spior"
-  s.version = "0.1.2"
+  s.version = "0.1.3"
   s.summary = "A tool to make TOR your default gateway and randomize your hardware"
   s.description = <<-EOF 
     A tool to make TOR your default gateway and randomize your hardware.

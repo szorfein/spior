@@ -9,7 +9,7 @@ module Spior
 
     def self.config_files
       @cp = Helpers::Exec.new("cp -a")
-      @conf_dir = File.expand_path('../..' + '/conf', __dir__)
+      @conf_dir = File.expand_path('../..' + '/ext', __dir__)
       copy_torrc
       copy_file(@conf_dir + "/resolv.conf", "/etc/resolv.conf")
       copy_file(@conf_dir + "/ipt_mod.conf", "/etc/modules-load.d/ipt_mod.conf")
