@@ -1,9 +1,9 @@
 Gem::Specification.new do |s|
   s.name = "spior"
-  s.version = "0.1.3"
-  s.summary = "A tool to make TOR your default gateway and randomize your hardware"
+  s.version = "0.1.4"
+  s.summary = "A tool to make TOR your default gateway"
   s.description = <<-EOF 
-    A tool to make TOR your default gateway and randomize your hardware.
+    A tool to make TOR your default gateway
   EOF
   s.metadata = {
     "changelog_uri" => "https://github.com/szorfein/spior/blob/master/CHANGELOG.md",

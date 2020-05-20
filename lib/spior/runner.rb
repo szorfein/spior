@@ -16,7 +16,7 @@ module Spior
     def run
       if @options.install then
         Msg.head
-        Spior::Install::deps
+        Spior::Install::check_deps
         Spior::Copy::config_files
       end
       if @options.tor then

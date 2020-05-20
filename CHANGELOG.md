@@ -1,3 +1,8 @@
+## 0.1.4, release 2020-05-15
+* Correct path of conf_dir for the install on gentoo
+* Remove self from lib/copy
+* Correct little error on lib/copy with undefined method `deps`
+
 ## 0.1.3, release 2020-05-14
 * Rename conf dir by ext
 * Clearing all codes about MAC
