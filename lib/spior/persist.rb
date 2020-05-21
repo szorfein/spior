@@ -8,13 +8,50 @@ module Spior
   module Persist
     extend self
 
-    def all(card_name)
-      @card_name = card_name
+    def all
       @services=[ "tor", "iptables" ]
+      services
+      save_rules
       search_for_systemd
     end
 
     private
+
+    # Install a systemd service where needed. TODO: test on more distrib
+    # no need on: archlinux
+    # need on: gentoo, debian, 
+    def services
+      return if !TTY::Which.exist?('systemctl') 
+      path_bin = "/sbin/iptables-restore"
+      path_rules = ""
+      case Nomansland::distro?
+      when :gentoo
+        path_rules = "/var/lib/iptables/rules-save"
+      when :debian
+        path_rules = "/etc/iptables/rules.v4"
+      end
+      string = <<EOF
+[Unit]
+Description=IPv4 Packet Filtering Framework for Spior
+Before=network-pre.target
+Wants=network-pre.target
+
+[Service]
+Type=oneshot
+ExecStart=#{path_bin} #{path_rules}
+ExecReload=#{path_bin} #{path_rules}
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
+EOF
+      case Nomansland::distro?
+      when :gentoo
+        new_systemd = Helpers::NewSystemd.new(string, "iptables.services")
+        new_systemd.add
+        new_systemd.perm("root", "644")
+      end
+    end
 
     def search_for_systemd
       return if !TTY::Which.exist?('systemctl') 
@@ -28,14 +65,14 @@ module Spior
           @systemctl.run("enable #{service}")
         end
       end
-      iptables_systemd
     end
 
-    def iptables_systemd
+    def save_rules
       case Nomansland::installer?
       when :pacman
         @iptables_save.run("-f /etc/iptables/iptables.rules")
       when :emerge
+        @systemctl = Helpers::Exec.new("systemctl")
         @systemctl.run("start iptables-store")
       when :apt_get
         @iptables_save.run("> /etc/iptables/rules.v4")

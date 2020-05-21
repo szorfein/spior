@@ -27,10 +27,7 @@ module Spior
         Spior::Iptables::tor(@network.card)
       end
       if @options.persist then
-        if not @network
-          @network = Spior::Network.new(@options.interface)
-        end
-        Spior::Persist::all(@network.card)
+        Spior::Persist::all
       end
     end
   end

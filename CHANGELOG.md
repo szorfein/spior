@@ -1,4 +1,6 @@
-## 0.1.4, release 2020-05-15
+## 0.1.4, release 2020-05-21
+* torrc and resolv.conf are generate dynamically
+* Remove conf/resolv
 * Correct path of conf_dir for the install on gentoo
 * Remove self from lib/copy
 * Correct little error on lib/copy with undefined method `deps`
