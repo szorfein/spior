@@ -1,10 +1,6 @@
 require 'pathname'
 require 'nomansland'
 require 'tty-which'
-require_relative 'msg'
-require_relative 'install'
-require_relative 'copy'
-require_relative 'helpers'
 
 module Spior
   class Tor

@@ -1,10 +1,3 @@
-require_relative 'msg'
-require_relative 'iptables'
-require_relative 'network'
-require_relative 'reload'
-require_relative 'clear'
-require_relative 'status'
-
 module Spior
   module Menu
     extend self

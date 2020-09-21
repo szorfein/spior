@@ -79,7 +79,7 @@ module Helpers
     # === Parameters:
     # * _string_ = the string of for whole content file
     # * _name_ = the name of the service (e.g: tor.service)
-    def initialise(string, name)
+    def initialize(string, name)
       super
       @systemd_dir = search_systemd_dir
       @dest = @systemd_dir + "/" + @name

@@ -1,5 +1,4 @@
 require 'interfacez'
-require_relative 'msg'
 
 module Spior
   class Network

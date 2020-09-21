@@ -1,8 +1,4 @@
 require 'optparse'
-require_relative 'reload'
-require_relative 'status'
-require_relative 'clear'
-require_relative 'menu'
 
 module Spior
   class Options

@@ -1,7 +1,4 @@
 require 'interfacez'
-require_relative 'tor'
-require_relative 'msg'
-require_relative 'helpers'
 
 module Spior
   class Iptables

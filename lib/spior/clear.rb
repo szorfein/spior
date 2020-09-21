@@ -1,8 +1,5 @@
 require 'tty-which'
 require 'nomansland'
-require_relative 'copy'
-require_relative 'msg'
-require_relative 'helpers'
 
 module Spior
   module Clear

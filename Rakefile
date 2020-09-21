@@ -1,5 +1,6 @@
 # https://github.com/seattlerb/minitest#running-your-tests-
 require "rake/testtask"
+require File.dirname(__FILE__) + "/lib/spior/version"
 
 Rake::TestTask.new(:test) do |t|
   t.libs << "test"
@@ -12,7 +13,7 @@ namespace :gem do
   task :build do
     Dir["spior*.gem"].each {|f| File.unlink(f) }
     system("gem build spior.gemspec")
-    system("gem install spior-0.1.4.gem -P MediumSecurity")
+    system("gem install spior-#{Spior::VERSION}.gem -P MediumSecurity")
   end
 end
 

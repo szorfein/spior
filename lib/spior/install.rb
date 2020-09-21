@@ -1,7 +1,5 @@
 require 'nomansland'
 require 'tty-which'
-require_relative 'msg'
-require_relative 'helpers'
 
 module Spior
   class Install
