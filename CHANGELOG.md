@@ -1,3 +1,5 @@
+* Enhance output of `--status`
+
 ## 0.1.4, release 2020-05-21
 * torrc and resolv.conf are generate dynamically
 * Remove conf/resolv

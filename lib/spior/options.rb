@@ -30,6 +30,7 @@ module Spior
 
         opts.on("-r", "--reload", "Reload TOR to change your ip") do
           Spior::Reload::tor
+          exit
         end
 
         opts.on("-c", "--clear", "Clear iptables rules and restore files") do
@@ -38,6 +39,7 @@ module Spior
 
         opts.on("-s", "--status", "Look infos about your current ip") do
           Spior::Status::info
+          exit
         end
 
         opts.on("-p", "--persist", "Active Spior at every boot.") do
