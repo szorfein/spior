@@ -1,22 +1,28 @@
 require 'open-uri'
+require 'json'
 
 module Spior
   module Status
+    def self.enable
+      status = "Disable"
+      api_check = "https://check.torproject.org/api/ip"
+      URI.open(api_check) do |l|
+        hash = JSON.parse l.read
+        status = "Enable" if hash["IsTor"] == true
+      end
+      status
+    end
 
-    # TODO: if someone want help, i have trouble to use JSON.parse()
     def self.info
-      puts
-      uri = URI.parse("https://ipleak.net/json")
-      uri.open { |f|
-        f.each_line { |line|
-          line_filter = line.chomp.delete("/\",{}").gsub(/\s*/, "")
-          puts "  =>  #{line_filter}" if line.match(/country/)
-          puts "  =>  #{line_filter}" if line.match(/continent/)
-          puts "  =>  #{line_filter}" if line.match(/time_zone/)
-          puts "  =>  #{line_filter}" if line.match(/ip/)
-        }
-      }
-      puts
+      api_check = "https://ipleak.net/json"
+      URI.open(api_check) do |l|
+        hash = JSON.parse l.read
+        puts
+        puts "Current ip  ===>  #{hash["ip"]}"
+        puts "Continent   ===>  #{hash["continent_name"]}"
+        puts "Timezone    ===>  #{hash["time_zone"]}"
+      end
+      puts "Status      ===>  #{enable}"
     end
   end
 end
