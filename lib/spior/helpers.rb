@@ -1,5 +1,6 @@
 require 'fileutils'
 require 'tempfile'
+require 'open3'
 
 module Helpers
   class Exec
@@ -9,12 +10,16 @@ module Helpers
     end
 
     def run(args)
-      if @search_uid == '0' then
-        #puts "found root - uid #{@search_uid}"
-        system(@name + " " + args)
-      else
-        #puts "no root - call sudo - uid #{@search_uid}"
-        system("sudo " + @name + " " + args)
+      cmd = @search_uid == '0' ? @name : "sudo #{@name}"
+      Open3.popen2e("#{cmd} #{args}") do |stdin, stdout_err, wait_thr|
+        while line = stdout_err.gets
+          puts line
+        end
+
+        exit_status = wait_thr.value
+        unless exit_status.success?
+          raise "Error, Running #{cmd} #{args}"
+        end
       end
     end
   end
@@ -47,6 +52,7 @@ module Helpers
       File.open(tmp.path, 'w') do |file|
         file.puts @string
       end
+      puts "move #{tmp.path} to #{@dest}"
       @mv.run("#{tmp.path} #{@dest}")
     end
 

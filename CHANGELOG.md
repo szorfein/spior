@@ -1,4 +1,4 @@
-* Enhance output of `--status`
+* Enhance --status with open-uri and json
 
 ## 0.1.4, release 2020-05-21
 * torrc and resolv.conf are generate dynamically

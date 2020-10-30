@@ -2,15 +2,64 @@ require 'interfacez'
 
 module Spior
   class Iptables
+    def initialize(interface)
+      @lo      = Interfacez.loopback
+      @lo_addr = Interfacez.ipv4_address_of(@lo)
+      @tor     = Spior::Tor.new
+      @non_tor = ["#{@lo_addr}/8", "192.168.0.0/16", "172.16.0.0/12", "10.0.0.0/8"]
+      @incoming      = interface
+      @incoming_addr = Interfacez.ipv4_address_of(@incoming)
+      @tables        = ["nat", "filter"]
+      @i = Helpers::Exec.new("iptables")
+    end
 
-    def self.tor(interface = false)
-      initialize(interface)
+    def run!
+      @tables.each { |table|
+        target = "ACCEPT"
+        target = "RETURN" if table == "nat"
+
+        ipt "-t #{table} -F OUTPUT"
+        ipt "-t #{table} -A OUTPUT -m state --state ESTABLISHED -j #{target}"
+        ipt "-t #{table} -A OUTPUT -m owner --uid #{@tor.uid} -j #{target}"
+
+        match_dns_port = @tor.dns
+        if table == "nat"
+          target = "REDIRECT --to-ports #{@tor.dns}"
+          match_dns_port = "53"
+        end
+
+        ipt "-t #{table} -A OUTPUT -p udp --dport #{match_dns_port} -j #{target}"
+        ipt "-t #{table} -A OUTPUT -p tcp --dport #{match_dns_port} -j #{target}"
+
+        target = "REDIRECT --to-ports #{@tor.trans_port}" if table == "nat"
+        ipt "-t #{table} -A OUTPUT -d #{@tor.virt_addr} -p tcp -j #{target}"
+
+        target = "RETURN" if table == "nat"
+        @non_tor.each { |ip|
+          ipt "-t #{table} -A OUTPUT -d #{ip} -j #{target}"
+        }
+
+        target = "REDIRECT --to-ports #{@tor.trans_port}" if table == "nat"
+        ipt "-t #{table} -A OUTPUT -p tcp -j #{target}"
+      }
+      ipt "-t filter -A OUTPUT -p udp -j REJECT"
+      ipt "-t filter -A OUTPUT -p icmp -j REJECT"
+    end
+
+    def restart
+      stop
+      start
+    end
+
+    def stop
+      flush_rules
+    end
+
+    def lol
       flush_rules
       bogus_tcp_flags
       bad_packets
       spoofing
-      icmp
-      dns
       nat
       input
       forward
@@ -18,8 +67,7 @@ module Spior
       drop_all
     end
 
-    def self.flush_rules
-      @i = Helpers::Exec.new("iptables")
+    def flush_rules
       ipt "-F"
       ipt "-X"
       ipt "-t nat -F"
@@ -30,31 +78,22 @@ module Spior
 
     private
 
-    def self.initialize(interface)
-      @lo = Interfacez.loopback
-      @lo_addr = Interfacez.ipv4_address_of(@lo)
-      @tor = Spior::Tor.new
-      @non_tor = ["#{@lo_addr}/8", "10.0.0.0/8", "172.16.0.0/12", "192.168.0.0/16"]
-      @incoming = interface
-      @incoming_addr = Interfacez.ipv4_address_of(@incoming)
-    end
-
-    def self.check_dep
+    def check_dep
       Spior::Copy::config_files
     end
 
-    def self.ipt(line)
+    def ipt(line)
       @i.run("#{line}")
       #puts "added - #{@i} #{line}"
     end
 
-    def self.drop_all
+    def drop_all
       ipt "-P INPUT DROP"
       ipt "-P FORWARD DROP"
       ipt "-P OUTPUT DROP"
     end
 
-    def self.bogus_tcp_flags
+    def bogus_tcp_flags
       puts "bogus"
       ipt "-t mangle -A PREROUTING -p tcp --tcp-flags FIN,SYN,RST,PSH,ACK,URG NONE -j DROP"
       ipt "-t mangle -A PREROUTING -p tcp --tcp-flags FIN,SYN FIN,SYN -j DROP"
@@ -71,7 +110,7 @@ module Spior
       ipt "-t mangle -A PREROUTING -p tcp --tcp-flags ALL SYN,RST,ACK,FIN,URG -j DROP"
     end
 
-    def self.bad_packets
+    def bad_packets
       puts "bad_packets"
       # new packet not syn
       ipt "-t mangle -A PREROUTING -p tcp ! --syn -m conntrack --ctstate NEW -j DROP"
@@ -83,7 +122,7 @@ module Spior
       ipt "-A INPUT -p tcp --tcp-flags ALL NONE -j DROP"
     end
 
-    def self.spoofing
+    def spoofing
       subs=["224.0.0.0/3", "169.254.0.0/16", "172.16.0.0/12", "192.0.2.0/24", "0.0.0.0/8", "240.0.0.0/5"]
       subs.each do |sub|
         ipt "-t mangle -A PREROUTING -s #{sub} -j DROP"
@@ -91,31 +130,7 @@ module Spior
       ipt "-t mangle -A PREROUTING -s #{@lo_addr}/8 ! -i #{@lo} -j DROP"
     end
 
-    def self.icmp
-      puts "icmp"
-      ipt "-N port-scanning"
-      ipt "-A port-scanning -p tcp --tcp-flags SYN,ACK,FIN,RST RST -m limit --limit 1/s --limit-burst 2 -j RETURN"
-      ipt "-A port-scanning -j DROP"
-
-      ipt "-N syn_flood"
-      ipt "-A INPUT -p tcp --syn -j syn_flood"
-      ipt "-A syn_flood -m limit --limit 1/s --limit-burst 3 -j RETURN"
-      ipt "-A syn_flood -j DROP"
-
-      ipt "-A INPUT -p icmp -m limit --limit  1/s --limit-burst 1 -j ACCEPT"
-      ipt "-A INPUT -p icmp -m limit --limit 1/s --limit-burst 1 -j LOG --log-prefix PING-DROP:"
-      ipt "-A INPUT -p icmp -j DROP"
-      ipt "-A OUTPUT -p icmp -j ACCEPT"
-    end
-
-    def self.dns
-      puts "dns"
-      ipt "-t nat -A PREROUTING ! -i #{@lo} -p udp -m udp --dport 53 -j REDIRECT --to-ports #{@tor.dns}"
-      ipt "-t nat -A OUTPUT -p udp -m udp --dport 53 -j REDIRECT --to-ports #{@tor.dns}"
-      ipt "-t nat -A OUTPUT -p tcp -m tcp --dport 53 -j REDIRECT --to-ports #{@tor.dns}"
-    end
-
-    def self.nat
+    def nat
       puts "nat"
       # nat .onion addresses
       ipt "-t nat -A OUTPUT -d #{@tor.virt_addr} -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -j REDIRECT --to-ports #{@tor.trans_port}"
@@ -136,7 +151,7 @@ module Spior
       ipt "-t nat -A OUTPUT -p tcp -m tcp --tcp-flags FIN,SYN,RST,ACK SYN -j REDIRECT --to-ports #{@tor.trans_port}"
     end
 
-    def self.input
+    def input
       puts "input"
       ipt "-A INPUT -i #{@incoming} -p tcp -s #{@incoming_addr} --dport 22 -m conntrack --ctstate NEW -j ACCEPT"
 
@@ -152,7 +167,7 @@ module Spior
       ipt "-A INPUT -j DROP"
     end
 
-    def self.output
+    def output
       puts "output"
       ipt "-A OUTPUT -m conntrack --ctstate INVALID -j LOG --log-prefix \"DROP INVALID \" --log-ip-options --log-tcp-options"
       ipt "-A OUTPUT -m conntrack --ctstate INVALID -j DROP"
@@ -171,7 +186,7 @@ module Spior
       ipt "-A OUTPUT -j DROP"
     end
 
-    def self.forward
+    def forward
       puts "forward"
       ipt "-A FORWARD -m conntrack --ctstate INVALID -j LOG --log-prefix \"DROP INVALID \" --log-ip-options --log-tcp-options"
       ipt "-A FORWARD -m conntrack --ctstate INVALID -j DROP"

@@ -20,9 +20,18 @@ module Spior
     end
 
     private
+
+    def check_network(network)
+      if network
+        @network = nil
+      else
+        @network = Spior::Network.new
+      end
+    end
+
     def run
       options = Options.new(@argv)
-      network = options.net_dev ? Network.new(options.net_dev) : Network.new()
+      check_network(options.interface)
 
       if options.install
         Msg.head
@@ -32,7 +41,7 @@ module Spior
 
       if options.tor
         Msg.head
-        Iptables::tor(network.card)
+        Iptables.new(@network).run!
       end
 
       if options.persist
