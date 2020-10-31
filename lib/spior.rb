@@ -35,7 +35,7 @@ module Spior
       end
 
       if options.persist
-        Persist::all
+        Persist.enable
       end
     end
   end

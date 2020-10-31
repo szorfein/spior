@@ -17,16 +17,19 @@ And install the gem
 ### Examples
 Redirect traffic through TOR:
 
-    $ spior -t
-    $ spior -t -n eth0
+    $ spior --tor
 
 Change your ip address by reloading the TOR circuit:
 
-    $ spior -r
+    $ spior --reload
 
 Look informations about your current ip address:
 
-    $ spior -s
+    $ spior --status
+
+Return to clearnet navigation
+
+    $ spior --clearnet
 
 ## Left Over
 
