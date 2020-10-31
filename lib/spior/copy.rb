@@ -5,7 +5,6 @@ require 'digest'
 module Spior
   class Copy
     class << self
-
       def config_files
         @cp = Helpers::Exec.new("cp -a")
         search_conf_dir

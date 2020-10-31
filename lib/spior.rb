@@ -4,7 +4,6 @@ require_relative 'spior/install'
 require_relative 'spior/iptables'
 require_relative 'spior/msg'
 require_relative 'spior/options'
-require_relative 'spior/reload'
 require_relative 'spior/status'
 require_relative 'spior/tor'
 require_relative 'spior/persist'
@@ -21,17 +20,8 @@ module Spior
 
     private
 
-    def check_network(network)
-      if network
-        @network = nil
-      else
-        @network = Spior::Network.new
-      end
-    end
-
     def run
       options = Options.new(@argv)
-      check_network(options.interface)
 
       if options.install
         Msg.head
@@ -41,7 +31,7 @@ module Spior
 
       if options.tor
         Msg.head
-        Iptables.new(@network).run!
+        Iptables::Tor.new.run!
       end
 
       if options.persist

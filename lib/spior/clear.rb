@@ -14,7 +14,8 @@ module Spior
 
     def iptables
       puts "Clearing rules.."
-      Spior::Iptables::flush_rules
+      ipt = Spior::Iptables::Default.new
+      ipt.stop!
       if File.exist?("/var/lib/iptables/rules-save")
         ipt_restore "/var/lib/iptables/rules-save"
       elsif File.exist?("/etc/iptables/rules.save")
@@ -22,7 +23,8 @@ module Spior
       elsif File.exist?("/etc/iptables.rules")
         ipt_restore "/etc/iptables.rules"
       else
-        Msg.p "I couldn't find any old rules for iptables to restore, skipping..."
+        Msg.p "Couldn't find any previous rules for iptables, create basic rules..."
+        ipt.run!
       end
     end
 
@@ -32,7 +34,7 @@ module Spior
     end
 
     def rez_configs
-      Spior::Copy::restore_files
+      Spior::Copy.restore_files
     end
   end
 end

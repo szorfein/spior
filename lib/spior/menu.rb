@@ -17,17 +17,17 @@ module Spior
         puts
         print ">> "
         case gets.chomp
-          when '1'
-            check_network
-            Spior::Iptables::tor(@network.card)
-          when '2'
-            Spior::Reload::tor
-          when '3'
-            Spior::Clear::all
-          when '4'
-            Spior::Status::info
-          when '5'
-            exit
+        when '1'
+          check_network
+          Spior::Iptables::tor(@network.card)
+        when '2'
+          Spior::Tor.restart
+        when '3'
+          Spior::Clear::all
+        when '4'
+          Spior::Status::info
+        when '5'
+          exit
         end
       end
     end

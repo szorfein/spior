@@ -2,11 +2,10 @@ require 'optparse'
 
 module Spior
   class Options
-    attr_reader :install , :mac , :interface , :tor , :persist
+    attr_reader :install , :tor , :persist
 
     def initialize(argv)
       @install = false
-      @mac = false
       @tor = false
       @persist = false
       parse(argv)
@@ -20,25 +19,21 @@ module Spior
           @install = true
         end
 
-        opts.on("-n", "--net-card NAME", "The name of the target network card") do |net|
-          @interface = net
-        end
-
         opts.on("-t", "--tor", "Redirect traffic through TOR") do
           @tor = true
         end
 
         opts.on("-r", "--reload", "Reload TOR to change your ip") do
-          Spior::Reload::tor
+          Spior::Tor.restart
           exit
         end
 
-        opts.on("-c", "--clear", "Clear iptables rules and restore files") do
-          Spior::Clear::all
+        opts.on("-s", "--stop", "Clear iptables rules and restore files") do
+          Spior::Clear.all
         end
 
-        opts.on("-s", "--status", "Look infos about your current ip") do
-          Spior::Status::info
+        opts.on("--status", "Look infos about your current ip") do
+          Spior::Status.info
           exit
         end
 
@@ -47,7 +42,7 @@ module Spior
         end
 
         opts.on("-m", "--menu", "Display an interactive menu") do
-          Spior::Menu::run
+          Spior::Menu.run
         end
 
         opts.on("-h", "--help", "Show this message") do
