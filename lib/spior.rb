@@ -26,7 +26,7 @@ module Spior
       if options.install
         Msg.head
         Install::check_deps
-        Copy::config_files
+        Copy.new.save
       end
 
       if options.tor

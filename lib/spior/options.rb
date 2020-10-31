@@ -28,11 +28,11 @@ module Spior
           exit
         end
 
-        opts.on("-s", "--stop", "Clear iptables rules and restore files") do
+        opts.on("-c", "--clearnet", "Reset iptables and return to clearnet navigation") do
           Spior::Clear.all
         end
 
-        opts.on("--status", "Look infos about your current ip") do
+        opts.on("-s", "--status", "Look infos about your current ip") do
           Spior::Status.info
           exit
         end

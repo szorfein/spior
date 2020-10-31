@@ -7,7 +7,7 @@ module Spior
         @lo      = Interfacez.loopback
         @lo_addr = Interfacez.ipv4_address_of(@lo)
         @i = Helpers::Exec.new("iptables")
-        check_dep
+        Spior::Copy.new.save
       end
 
       def run!
@@ -39,10 +39,6 @@ module Spior
       def ipt(line)
         @i.run("#{line}")
         puts "added - #{@i} #{line}"
-      end
-
-      def check_dep
-        Spior::Copy::config_files
       end
 
       def redirect

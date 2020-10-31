@@ -7,7 +7,7 @@ module Spior
 
     def all
       iptables
-      rez_configs
+      Spior::Copy.new.restore
     end
 
     private
@@ -31,10 +31,6 @@ module Spior
     def ipt_restore(path)
       puts "Restoring rules #{path}..."
       Helpers::Exec.new("iptables-restore").run("#{path}")
-    end
-
-    def rez_configs
-      Spior::Copy.restore_files
     end
   end
 end
