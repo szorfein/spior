@@ -18,14 +18,13 @@ module Spior
         print ">> "
         case gets.chomp
         when '1'
-          check_network
-          Spior::Iptables::tor(@network.card)
+          Spior::Iptables::Tor.new.run!
         when '2'
           Spior::Tor.restart
         when '3'
-          Spior::Clear::all
+          Spior::Clear.all
         when '4'
-          Spior::Status::info
+          Spior::Status.info
         when '5'
           exit
         end
@@ -39,12 +38,6 @@ module Spior
       puts "┗━┓┣━┛┃┃ ┃┣┳┛"
       puts "┗━┛╹  ╹┗━┛╹┗╸"
       # generated with toilet -F crop -f future spior
-    end
-
-    def check_network
-      if not @network
-        @network = Spior::Network.new
-      end
     end
   end
 end

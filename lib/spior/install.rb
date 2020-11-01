@@ -4,7 +4,6 @@ require 'tty-which'
 module Spior
   class Install
     class << self
-
       def check_deps
         base_packages
       end

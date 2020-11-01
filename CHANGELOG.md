@@ -1,4 +1,9 @@
+## 0.1.5, release 2020-11-01
+* Simplify lib/spior/copy, lib/spior/clear
+* Write iptables rules for --clearnet and --tor
+* Refacto code
 * Enhance --status with open-uri and json
+* Remove argument --net-card
 
 ## 0.1.4, release 2020-05-21
 * torrc and resolv.conf are generate dynamically
