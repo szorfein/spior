@@ -1,0 +1,53 @@
+.\" generated with Ronn/v0.7.3
+.\" http://github.com/rtomayko/ronn/tree/0.7.3
+.
+.TH "SPIOR" "1" "December 2021" "" ""
+.
+.SH "NAME"
+\fBspior\fR \- Redirect all traffic to the Tor network
+.
+.SH "SYNOPSIS"
+\fBspior\fR [\fIOPTIONS\fR\.\.\.]
+.
+.SH "DESCRIPTION"
+\fBSpior\fR can redirect all the local traffic to the Tor network\.
+.
+.SH "OPTIONS"
+.
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+Display the help and exit\.
+.
+.TP
+\fB\-t\fR, \fB\-\-tor\fR
+Spior will backup and create a new \fB/etc/tor/torrc\fR to add the required \fBtor\fR options\. He also modify the file \fB/etc/resolv\.conf\fR to be able to use DNS over Tor and finally use \fBiptables\fR to create the transparent proxy throught Tor\.
+.
+.TP
+\fB\-p\fR, \fB\-\-persist\fR
+This option use \fBiptable\-save\fR to save actual rules and try to enable the service \fBiptables\fR for boot\.
+.
+.TP
+\fB\-r\fR, \fB\-\-reload\fR
+This option reload the Tor circuit which change your current ip address\. Use this option if your actual ip is blacklisted\.
+.
+.TP
+\fB\-c\fR, \fB\-\-clearnet\fR
+This option stop to redirect to Tor (by cleaning \fBiptables\fR rules) and use the normal connection\.
+.
+.SH "EXAMPLES"
+Display the help:
+.
+.br
+$ spior \-h
+.
+.P
+Redirect all the traffic throught Tor:
+.
+.br
+$ spior \-\-tor
+.
+.SH "SEE ALSO"
+iptables(8), tor(1)
+.
+.SH "ISSUES"
+You are free to report any new bugs|features|issues at https://github\.com/szorfein/spior/issues\.
