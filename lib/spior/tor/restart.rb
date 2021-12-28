@@ -6,7 +6,10 @@ module Spior
     def restart
       if TTY::Which.exist?('systemctl')
         Helpers::Exec.new("systemctl").run("restart tor")
-        Msg.p "ip changed"
+        Msg.p "ip changed."
+      elsif TTY::Which.exist? 'sv'
+        Helpers::Exec.new('sv').run('restart tor')
+        Msg.p 'ip changed.'
       end
     end
   end
