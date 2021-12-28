@@ -16,8 +16,10 @@ module Spior
           Helpers::Exec.new('ln').run('-s /etc/sv/tor /var/service/tor')
           Msg.p "TOR started."
         end
+      elsif File.exist? '/etc/init.d/tor'
+        Helpers::Exec.new('/etc/init.d/tor').run('start')
       else
-        Msg.report "Don't known yet how to start TOR for your system."
+        Msg.report "Don't known yet how to start Tor for your system."
       end
     end
   end
