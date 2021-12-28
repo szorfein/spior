@@ -9,7 +9,7 @@ module Spior
       end
 
       private
-      
+
       def redirect
         @tables.each { |table|
           target = "ACCEPT"
@@ -46,8 +46,6 @@ module Spior
         ipt "-A INPUT -p tcp --dport 22 -m conntrack --ctstate NEW -j ACCEPT"
         # Allow loopback
         ipt "-A INPUT -i #{@lo} -j ACCEPT"
-        # Allow DNS lookups from connected clients and internet access through tor.
-        ipt "-A INPUT -p udp -m udp --dport #{@tor.dns} -j ACCEPT"
         # Accept related
         ipt "-A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT"
       end

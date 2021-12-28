@@ -21,16 +21,8 @@ module Spior
       def check_deps
         Spior::Install::check_deps
         Spior::Copy.new.save
-        add_resolv
         add_torrc
         Spior::Service.start
-      end
-
-      def add_resolv
-        string = "nameserver 127.0.0.1"
-        new_file = Helpers::NewFile.new(string, "resolv.conf", "/etc")
-        new_file.add
-        new_file.perm("root", "644")
       end
 
       def self.grep?(file, regex)
