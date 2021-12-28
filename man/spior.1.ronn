@@ -16,8 +16,7 @@ spior(1) -- Redirect all traffic to the Tor network
 
   * `-t`, `--tor`:
     Spior will backup and create a new `/etc/tor/torrc` to add the required
-    `tor` options. He also modify the file `/etc/resolv.conf` to be able to
-    use DNS over Tor and finally use `iptables` to create the transparent proxy
+    `tor` options and finally use `iptables` to create a transparent proxy
     throught Tor.
 
   * `-p`, `--persist`:

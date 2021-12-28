@@ -53,9 +53,6 @@ module Spior
       def all
         ipt "-t filter -A OUTPUT -p udp -j REJECT"
         ipt "-t filter -A OUTPUT -p icmp -j REJECT"
-        ipt "-P INPUT DROP"
-        ipt "-P FORWARD DROP"
-        ipt "-P OUTPUT DROP"
       end
     end
   end
