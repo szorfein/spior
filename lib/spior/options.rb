@@ -24,7 +24,7 @@ module Spior
         end
 
         opts.on("-r", "--reload", "Reload TOR to change your ip") do
-          Spior::Tor.restart
+          Spior::Service.restart
           exit
         end
 

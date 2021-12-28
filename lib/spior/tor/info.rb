@@ -23,7 +23,7 @@ module Spior
         Spior::Copy.new.save
         add_resolv
         add_torrc
-        verify_service
+        Spior::Service.start
       end
 
       def add_resolv
@@ -100,23 +100,6 @@ EOF
 
       def search_virt_addr
         "10.192.0.0/10"
-      end
-
-      def verify_service
-        if TTY::Which.exist?('systemctl')
-          state = `systemctl is-active tor`.chomp
-          if state == 'active'
-            Spior::Tor::restart
-          else
-            @systemctl.run('start tor')
-          end
-        elsif TTY::Which.exist? 'sv'
-          unless File.exist? '/var/service/tor'
-            Helpers::Exec.new('ln').run('-s /etc/sv/tor /var/service/tor')
-          end
-        else
-          Msg.for_no_systemd
-        end
       end
     end
   end
