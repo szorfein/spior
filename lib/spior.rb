@@ -9,6 +9,7 @@ require_relative 'spior/tor'
 require_relative 'spior/persist'
 require_relative 'spior/network'
 require_relative 'spior/menu'
+require_relative 'spior/service'
 require_relative 'spior/helpers'
 
 module Spior
