@@ -1,0 +1,47 @@
+spior(1) -- Redirect all traffic to the Tor network
+====================================================
+
+## SYNOPSIS
+
+`spior` [<OPTIONS>...]
+
+## DESCRIPTION
+
+**Spior** can redirect all the local traffic to the Tor network.
+
+## OPTIONS
+
+  * `-h`, `--help`:
+    Display the help and exit.
+
+  * `-t`, `--tor`:
+    Spior will backup and create a new `/etc/tor/torrc` to add the required
+    `tor` options. He also modify the file `/etc/resolv.conf` to be able to
+    use DNS over Tor and finally use `iptables` to create the transparent proxy
+    throught Tor.
+
+  * `-p`, `--persist`:
+    This option use `iptable-save` to save actual rules and try to enable the service `iptables` for boot.
+
+  * `-r`, `--reload`:
+    This option reload the Tor circuit which change your current ip address. Use this option if your actual ip is blacklisted.
+
+  * `-c`, `--clearnet`:
+    This option stop to redirect to Tor (by cleaning `iptables` rules) and use the normal connection.
+
+## EXAMPLES
+
+Display the help:<br>
+    $ spior -h
+
+Redirect all the traffic throught Tor:<br>
+    $ spior --tor
+
+
+## SEE ALSO
+
+iptables(8), tor(1)
+
+## ISSUES
+
+You are free to report any new bugs|features|issues at https://github.com/szorfein/spior/issues.
