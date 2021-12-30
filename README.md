@@ -6,9 +6,13 @@ Spior is cryptographically signed, so add my public key (if you haven’t alread
 
     $ gem cert --add <(curl -Ls https://raw.githubusercontent.com/szorfein/spior/master/certs/szorfein.pem)
 
-And install the gem
+And install the gem:
 
     $ gem install spior -P MediumSecurity
+
+Or only user wide (Spior will use `sudo`)
+
+    $ gem install --user-install spior
 
 ## Usage
 

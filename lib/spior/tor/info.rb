@@ -9,7 +9,6 @@ module Spior
 
       def initialize
         @systemctl = Helpers::Exec.new("systemctl")
-        check_deps
         @dns = search_dns
         @uid = search_uid
         @trans_port = search_trans_port
@@ -19,7 +18,6 @@ module Spior
       private 
 
       def check_deps
-        Spior::Install::check_deps
         Spior::Copy.new.save
         add_torrc
         Spior::Service.start
