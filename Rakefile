@@ -13,7 +13,7 @@ namespace :gem do
   task :build do
     Dir["spior*.gem"].each {|f| File.unlink(f) }
     system("gem build spior.gemspec")
-    system("gem install spior-#{Spior::VERSION}.gem -P MediumSecurity")
+    system("gem install --user-install spior-#{Spior::VERSION}.gem -P MediumSecurity")
   end
 end
 
