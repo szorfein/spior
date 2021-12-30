@@ -11,6 +11,7 @@ module Spior
       end
 
       def run!
+        stop!
         bogus_tcp_flags
         bad_packets
         spoofing
@@ -18,11 +19,6 @@ module Spior
         input
         output
         all
-      end
-
-      def restart!
-        stop!
-        run!
       end
 
       def stop!

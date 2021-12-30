@@ -1,4 +1,3 @@
-require 'tty-which'
 require 'nomansland'
 
 module Spior

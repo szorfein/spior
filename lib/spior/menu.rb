@@ -20,7 +20,7 @@ module Spior
         when '1'
           Spior::Iptables::Tor.new.run!
         when '2'
-          Spior::Tor.restart
+          Spior::Serice.restart
         when '3'
           Spior::Clear.all
         when '4'

@@ -1,4 +1,13 @@
-# spior
+# Spior
+
+<div align="center">
+<br/>
+
+[![Gem Version](https://badge.fury.io/rb/spior.svg)](https://badge.fury.io/rb/spior)
+![GitHub](https://img.shields.io/github/license/szorfein/spior)
+
+</div>
+
 (Spider|Tor) A tool to make TOR your default gateway.
 
 ## Install
@@ -6,9 +15,13 @@ Spior is cryptographically signed, so add my public key (if you haven’t alread
 
     $ gem cert --add <(curl -Ls https://raw.githubusercontent.com/szorfein/spior/master/certs/szorfein.pem)
 
-And install the gem
+And install the gem:
 
     $ gem install spior -P MediumSecurity
+
+Or user wide (Spior will use `sudo`)
+
+    $ gem install --user-install spior
 
 ## Usage
 

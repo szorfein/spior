@@ -1,3 +1,10 @@
+## 0.1.6, release 2021-12-30
+* Make it work for Voidlinux.
+* Add a man page.
+* Support init script (but not yet very well).
+* Stop changing /etc/resolv.conf.
+* Dependencies are checked before start anything. Spior exit(1) if fail.
+
 ## 0.1.5, release 2020-11-01
 * Simplify lib/spior/copy, lib/spior/clear
 * Write iptables rules for --clearnet and --tor
