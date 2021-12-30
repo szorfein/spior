@@ -15,7 +15,7 @@ module Spior
 
     def parse(argv)
       OptionParser.new do |opts|
-        opts.on("-i", "--install", "Check and install dependencies") do
+        opts.on("-i", "--install", "Install the dependencies") do
           @install = true
         end
 

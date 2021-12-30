@@ -86,8 +86,7 @@
 <dl>
 <dt><code>-h</code>, <code>--help</code></dt><dd><p>Display the help and exit.</p></dd>
 <dt><code>-t</code>, <code>--tor</code></dt><dd><p>Spior will backup and create a new <code>/etc/tor/torrc</code> to add the required
-<code>tor</code> options. He also modify the file <code>/etc/resolv.conf</code> to be able to
-use DNS over Tor and finally use <code>iptables</code> to create the transparent proxy
+<code>tor</code> options and finally use <code>iptables</code> to create a transparent proxy
 throught Tor.</p></dd>
 <dt><code>-p</code>, <code>--persist</code></dt><dd><p>This option use <code>iptable-save</code> to save actual rules and try to enable the service <code>iptables</code> for boot.</p></dd>
 <dt><code>-r</code>, <code>--reload</code></dt><dd><p>This option reload the Tor circuit which change your current ip address. Use this option if your actual ip is blacklisted.</p></dd>

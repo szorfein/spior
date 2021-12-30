@@ -25,8 +25,4 @@ module Msg
     puts "Please, report this issue at https://github.com/szorfein/spior/issues"
     puts ""
   end
-
-  def for_no_systemd
-    puts "Init system is not yet supported. You can contribute to add it."
-  end
 end

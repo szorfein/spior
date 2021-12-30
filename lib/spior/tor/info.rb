@@ -9,7 +9,6 @@ module Spior
 
       def initialize
         @systemctl = Helpers::Exec.new("systemctl")
-        check_deps
         @dns = search_dns
         @uid = search_uid
         @trans_port = search_trans_port
@@ -19,18 +18,9 @@ module Spior
       private 
 
       def check_deps
-        Spior::Install::check_deps
         Spior::Copy.new.save
-        add_resolv
         add_torrc
         Spior::Service.start
-      end
-
-      def add_resolv
-        string = "nameserver 127.0.0.1"
-        new_file = Helpers::NewFile.new(string, "resolv.conf", "/etc")
-        new_file.add
-        new_file.perm("root", "644")
       end
 
       def self.grep?(file, regex)
