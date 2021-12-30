@@ -1,4 +1,13 @@
-# spior
+# Spior
+
+<div align="center">
+<br/>
+
+[![Gem Version](https://badge.fury.io/rb/spior.svg)](https://badge.fury.io/rb/spior)
+![GitHub](https://img.shields.io/github/license/szorfein/spior)
+
+</div>
+
 (Spider|Tor) A tool to make TOR your default gateway.
 
 ## Install
@@ -10,7 +19,7 @@ And install the gem:
 
     $ gem install spior -P MediumSecurity
 
-Or only user wide (Spior will use `sudo`)
+Or user wide (Spior will use `sudo`)
 
     $ gem install --user-install spior
 
