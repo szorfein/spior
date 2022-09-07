@@ -1,7 +1,10 @@
+require 'nomansland'
+
 module Spior
   module Tor
     class Data
       attr_reader :user, :dns_port, :dns_listen_address, :trans_port, :virt_addr
+      attr_reader :uid
 
       def initialize
         @user = search('User') || 'tor'
@@ -9,6 +12,7 @@ module Spior
         @dns_listen_address = search('DNSListenAddress') || '127.0.0.1'
         @trans_port = search('TransPort') || '9040'
         @virt_addr = search('VirtualAddrNetworkIPv4') || '10.192.0.0/10'
+        @uid = search_uid || 0
       end
 
       private
@@ -22,6 +26,17 @@ module Spior
           end
         end
         false
+      end
+
+      def search_uid
+        case Nomansland::distro?
+        when :debian
+          `id -u debian-tor`.chomp
+        when :ubuntu
+          `id -u debian-tor`.chomp
+        else
+          `id -u #{@user}`.chomp
+        end
       end
     end
   end

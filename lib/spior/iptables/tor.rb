@@ -3,7 +3,7 @@ module Spior
     class Tor < Iptables::Root
       def initialize
         super
-        @tor     = Spior::Tor::Info.new
+        @tor     = Spior::Tor::Data.new
         @non_tor = ["#{@lo_addr}/8", "192.168.0.0/16", "172.16.0.0/12", "10.0.0.0/8"]
         @tables  = ["nat", "filter"]
       end
@@ -19,9 +19,9 @@ module Spior
           ipt "-t #{table} -A OUTPUT -m state --state ESTABLISHED -j #{target}"
           ipt "-t #{table} -A OUTPUT -m owner --uid #{@tor.uid} -j #{target}"
 
-          match_dns_port = @tor.dns
+          match_dns_port = @tor.dns_port
           if table == "nat"
-            target = "REDIRECT --to-ports #{@tor.dns}"
+            target = "REDIRECT --to-ports #{@tor.dns_port}"
             match_dns_port = "53"
           end
 
