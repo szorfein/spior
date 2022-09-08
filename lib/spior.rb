@@ -33,6 +33,7 @@ module Spior
 
       if options.tor
         Msg.head
+        Service.start
         Iptables::Tor.new.run!
       end
 
