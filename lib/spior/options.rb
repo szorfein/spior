@@ -29,6 +29,7 @@ module Spior
         end
 
         opts.on("-c", "--clearnet", "Reset iptables and return to clearnet navigation") do
+          Service.stop
           Spior::Clear.all
         end
 

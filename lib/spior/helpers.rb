@@ -49,9 +49,7 @@ module Helpers
     def add
       @mv = Helpers::Exec.new("mv")
       tmp = Tempfile.new(@name)
-      File.open(tmp.path, 'w') do |file|
-        file.puts @string
-      end
+      File.write tmp.path, "#{@string}\n"
       puts "move #{tmp.path} to #{@dest}"
       @mv.run("#{tmp.path} #{@dest}")
     end
