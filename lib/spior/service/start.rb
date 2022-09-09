@@ -7,12 +7,11 @@ module Spior
 
     def start
       tmp_file = Tempfile.new('torrc')
+
       Tor::Config.new(tmp_file).generate
 
       # Use Kernel.spawn here
-      Process::Sys.getuid == '0' ?
-        spawn("sudo tor -f #{tmp_file.path}", :out => "/dev/null") :
-        spawn("tor -f #{tmp_file.path}", :out => "/dev/null")
+      x("tor -f #{tmp_file.path}")
 
       case Nomansland.init?
       when :systemd
@@ -34,6 +33,11 @@ module Spior
       else
         Msg.report "Don't known yet how to start Tor for your system."
       end
+    end
+
+    def x(arg)
+      auth = Process::Sys.getuid == '0' ? '' : 'sudo'
+      spawn("#{auth} #{arg}", :out => '/dev/null') or raise 'Error'
     end
   end
 end

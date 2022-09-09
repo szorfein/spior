@@ -3,6 +3,13 @@ module Spior
     module_function
 
     def stop
+      old_pid = `pgrep -f "tor -f /tmp/torrc*"`.chomp
+
+      if old_pid
+        Msg.p "Found old pid > #{old_pid}, killing it..."
+        Helpers::Exec.new('kill').run("-9 #{old_pid}")
+      end
+
       case Nomansland.init?
       when :systemd
         Msg.p "Stopping Tor with Systemd..."

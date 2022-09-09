@@ -12,6 +12,7 @@ require_relative 'spior/service'
 require_relative 'spior/helpers'
 
 module Spior
+
   class Main
     def initialize(argv)
       @argv = argv
