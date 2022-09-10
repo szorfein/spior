@@ -4,4 +4,3 @@ module Spior
 end
 
 require_relative 'tor/data'
-require_relative 'tor/info'

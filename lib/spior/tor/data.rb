@@ -2,9 +2,12 @@ require 'nomansland'
 
 module Spior
   module Tor
+    ##
+    # Data
+    # Fill Spior::CONFIG with data on Tor found on /etc/tor/torrc or use default
     class Data
-      attr_reader :user, :dns_port, :dns_listen_address, :trans_port, :virt_addr
-      attr_reader :uid
+      attr_accessor :user, :dns_port, :dns_listen_address
+      attr_accessor :trans_port, :virt_addr, :uid
 
       def initialize
         @user = search('User') || 'tor'
@@ -30,9 +33,7 @@ module Spior
 
       def search_uid
         case Nomansland::distro?
-        when :debian
-          `id -u debian-tor`.chomp
-        when :ubuntu
+        when :debian || :ubuntu
           `id -u debian-tor`.chomp
         else
           `id -u #{@user}`.chomp
