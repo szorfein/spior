@@ -2,11 +2,10 @@ require 'optparse'
 
 module Spior
   class Options
-    attr_reader :install , :tor , :persist
+    attr_reader :install , :persist
 
     def initialize(argv)
       @install = false
-      @tor = false
       @persist = false
       parse(argv)
     end
@@ -20,7 +19,7 @@ module Spior
         end
 
         opts.on("-t", "--tor", "Redirect traffic through TOR") do
-          @tor = true
+          Spior::Service.start
         end
 
         opts.on("-r", "--reload", "Reload TOR to change your ip") do
@@ -29,8 +28,7 @@ module Spior
         end
 
         opts.on("-c", "--clearnet", "Reset iptables and return to clearnet navigation") do
-          Service.stop
-          Spior::Clear.all
+          Spior::Service.stop
         end
 
         opts.on("-s", "--status", "Look infos about your current ip") do
