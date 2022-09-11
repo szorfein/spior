@@ -5,7 +5,6 @@ module Spior
     class Tor < Iptables::Root
       def initialize
         super
-        @tor     = Spior::Tor::Info.new
         @non_tor = %W[#{@lo_addr}/8 192.168.0.0/16 172.16.0.0/12 10.0.0.0/8]
         @tables  = %w[nat filter]
       end

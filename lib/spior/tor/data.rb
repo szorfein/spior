@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'nomansland'
 
 module Spior
@@ -32,7 +34,7 @@ module Spior
       end
 
       def search_uid
-        case Nomansland::distro?
+        case Nomansland.distro?
         when :debian || :ubuntu
           `id -u debian-tor`.chomp
         else

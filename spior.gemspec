@@ -39,7 +39,7 @@ Gem::Specification.new do |s|
   s.required_ruby_version = '>=2.6'
 
   s.add_runtime_dependency('interfacez', '1.0.3')
-  s.add_runtime_dependency('nomansland', '0.0.3')
+  s.add_runtime_dependency('nomansland', '0.0.5')
   s.add_runtime_dependency('rainbow', '3.0.0')
   s.add_runtime_dependency('tty-which', '0.4.2')
 end

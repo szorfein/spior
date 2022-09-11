@@ -31,13 +31,6 @@ module Spior
         Copy.new.save
       end
 
-      Dep.check
-
-      if options.tor
-        Msg.head
-        Iptables::Tor.new.run!
-      end
-
       if options.persist
         Persist.enable
       end
