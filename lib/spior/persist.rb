@@ -3,6 +3,12 @@
 require 'nomansland'
 
 module Spior
+
+  # Persist should enable the Tor redirection when you boot your system
+  #
+  # It should use and enable the services:
+  # + tor
+  # + iptables-restore
   module Persist
     extend self
 

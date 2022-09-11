@@ -3,6 +3,8 @@
 require 'digest'
 
 module Spior
+
+  # Copy is used to backup and restore files used by Spior.
   class Copy
     def initialize
       @cp = Helpers::Exec.new('cp -a')

@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 module Spior
+
+  # Service should start/stop/restart Tor and Iptable.
   module Service
   end
 end

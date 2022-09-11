@@ -4,6 +4,8 @@ module Spior
   module Tor
     module_function
 
+    # Stop Tor service on your distribution (linux)
+    # It also kill previous instance run by Spior
     def stop
       old_pid = `pgrep -f "tor -f /tmp/torrc*"`.chomp
 

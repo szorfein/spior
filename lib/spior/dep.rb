@@ -4,6 +4,8 @@ require 'nomansland'
 require 'tty-which'
 
 module Spior
+
+  # Dep: install all dependencies for Spior
   module Dep
     def self.check
       deps = %w[iptables tor]
