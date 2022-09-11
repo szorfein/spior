@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Spior
   module Menu
     extend self
@@ -6,16 +8,16 @@ module Spior
       banner
       loop do
         Msg.head
-        puts %q{Please select an option:
+        puts 'Please select an option:
 
   1. Redirect traffic through tor
   2. Reload tor and change your ip
   3. Clear and restore your files
   4. Check info on your current ip
-  5. Quit}
+  5. Quit'
 
         puts
-        print ">> "
+        print '>> '
         case gets.chomp
         when '1'
           Spior::Iptables::Tor.new.run!
@@ -31,12 +33,12 @@ module Spior
       end
     end
 
-    private 
+    private
 
     def banner
-      puts "┏━┓┏━┓╻┏━┓┏━┓"
-      puts "┗━┓┣━┛┃┃ ┃┣┳┛"
-      puts "┗━┛╹  ╹┗━┛╹┗╸"
+      puts '┏━┓┏━┓╻┏━┓┏━┓'
+      puts '┗━┓┣━┛┃┃ ┃┣┳┛'
+      puts '┗━┛╹  ╹┗━┛╹┗╸'
       # generated with toilet -F crop -f future spior
     end
   end
