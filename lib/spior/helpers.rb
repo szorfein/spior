@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'fileutils'
 require 'tempfile'
 require 'open3'
@@ -11,7 +13,7 @@ module Helpers
 
     def run(args)
       cmd = @search_uid == '0' ? @name : "sudo #{@name}"
-      Open3.popen2e("#{cmd} #{args}") do |stdin, stdout_err, wait_thr|
+      Open3.popen2e("#{cmd} #{args}") do |_, stdout_err, wait_thr|
         while line = stdout_err.gets
           puts line
         end
@@ -38,27 +40,27 @@ module Helpers
     # * _string_ = string for the whole file
     # * _name_ = name of the file (e.g: resolv.conf)
     # * _dest_ = path (e.g: /etc)
-    def initialize(string, name, dest = "/tmp")
+    def initialize(string, name, dest = '/tmp')
       @string = string
       @name = name
-      @dest = dest + "/" + @name
+      @dest = "#{dest}/#{@name}"
     end
 
     # Method #add
     # Add the file at @dest
     def add
-      @mv = Helpers::Exec.new("mv")
+      @mv = Helpers::Exec.new('mv')
       tmp = Tempfile.new(@name)
       File.open(tmp.path, 'w') do |file|
         file.puts @string
       end
-      puts "move #{tmp.path} to #{@dest}"
+      puts "Move #{tmp.path} to #{@dest}"
       @mv.run("#{tmp.path} #{@dest}")
     end
 
     def perm(user, perm)
-      chown = Helpers::Exec.new("chown")
-      chmod = Helpers::Exec.new("chmod")
+      chown = Helpers::Exec.new('chown')
+      chmod = Helpers::Exec.new('chmod')
       chown.run("#{user}:#{user} #{@dest}")
       chmod.run("#{perm} #{@dest}")
     end
@@ -88,30 +90,30 @@ module Helpers
     def initialize(string, name)
       super
       @systemd_dir = search_systemd_dir
-      @dest = @systemd_dir + "/" + @name
+      @dest = "#{@systemd_dir}/#{@name}"
     end
 
     # Method #add
     # Create a temporary file and move
     # the service @name to the systemd directory
     def add
-      @systemctl = Helpers::Exec.new("systemctl")
+      @systemctl = Helpers::Exec.new('systemctl')
       super
-      @systemctl.run("daemon-reload")
+      @systemctl.run('daemon-reload')
     end
 
     private
+
     # Method search_systemd_dir
     # Search the current directory for systemd services
     # + Gentoo can install at /lib/systemd/system or /usr/lib/systemd/system
     def search_systemd_dir
-      if Dir.exist? "/lib/systemd/system"
-        "/lib/systemd/system"
-      elsif Dir.exist? "/usr/lib/systemd/system"
-        "/usr/lib/systemd/system"
+      if Dir.exist? '/lib/systemd/system'
+        '/lib/systemd/system'
+      elsif Dir.exist? '/usr/lib/systemd/system'
+        '/usr/lib/systemd/system'
       else
-        raise "No directory systemd found"
-        exit
+        raise 'No directory systemd found'
       end
     end
   end

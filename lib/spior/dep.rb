@@ -1,23 +1,25 @@
+# frozen_string_literal: true
+
 require 'nomansland'
 require 'tty-which'
 
 module Spior
   module Dep
     def self.check
-      deps = [ 'iptables', 'tor' ]
+      deps = %w[iptables tor]
       is_ok = true
       Msg.p 'Searching dependencies...'
-      deps.each {|dep|
+      deps.map do |dep|
         unless TTY::Which.exist? dep
           Msg.err "-> #{dep} is lacked."
           is_ok = false
         end
-      }
+      end
       exit 1 unless is_ok
     end
 
     def self.install
-      case Nomansland::installer?
+      case Nomansland.installer?
       when :emerge
         Helpers::Exec.new('emerge -av').run('tor iptables')
       when :pacman
@@ -31,7 +33,7 @@ module Spior
       else
         Msg.report 'Your system is not yet supported.'
       end
-      exit 0
+      exit
     end
   end
 end

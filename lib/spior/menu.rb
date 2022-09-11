@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Spior
   module Menu
     extend self
@@ -15,7 +17,7 @@ module Spior
   5. Quit}
 
         puts
-        print ">> "
+        print '>> '
         case gets.chomp
         when '1'
           Spior::Iptables::Tor.new.run!
@@ -31,12 +33,12 @@ module Spior
       end
     end
 
-    private 
+    private
 
     def banner
-      puts "┏━┓┏━┓╻┏━┓┏━┓"
-      puts "┗━┓┣━┛┃┃ ┃┣┳┛"
-      puts "┗━┛╹  ╹┗━┛╹┗╸"
+      puts '┏━┓┏━┓╻┏━┓┏━┓'
+      puts '┗━┓┣━┛┃┃ ┃┣┳┛'
+      puts '┗━┛╹  ╹┗━┛╹┗╸'
       # generated with toilet -F crop -f future spior
     end
   end
