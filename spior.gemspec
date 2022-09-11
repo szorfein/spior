@@ -1,14 +1,14 @@
 # frozen_string_literal: true
 
-require File.dirname(__FILE__) + "/lib/spior/version"
+require File.dirname(__FILE__) + '/lib/spior/version'
 
 Gem::Specification.new do |s|
   s.name = 'spior'
   s.version = Spior::VERSION
   s.summary = 'A tool to make TOR your default gateway'
-  s.description = <<-EOF 
+  s.description = <<-DESC
     A tool to make TOR your default gateway
-  EOF
+  DESC
   s.metadata = {
     'changelog_uri' => 'https://github.com/szorfein/spior/blob/master/CHANGELOG.md',
     'bug_tracker_uri' => 'https://github.com/szorfein/spior/issues',
@@ -25,7 +25,7 @@ Gem::Specification.new do |s|
   s.files = `git ls-files`.split(" ")
   s.files.reject! { |fn| fn.include? 'certs' }
   s.files.reject! { |fn| fn.include? 'Makefile' }
-  s.executables = [ 'spior' ]
+  s.executables = ['spior']
 
   s.extra_rdoc_files = Dir['README.md', 'CHANGELOG.md', 'LICENSE.txt']
 

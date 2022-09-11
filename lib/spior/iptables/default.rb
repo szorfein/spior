@@ -4,7 +4,7 @@ module Spior
   module Iptables
     class Default < Iptables::Root
       private
-      
+
       def input
         # SSH
         ipt '-A INPUT -p tcp --dport 22 -m conntrack --ctstate NEW -j ACCEPT'

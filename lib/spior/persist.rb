@@ -37,15 +37,17 @@ module Spior
     def systemd_enable(service)
       systemctl = Helpers::Exec.new('systemctl')
       Msg.p "Search for service #{service}..."
-      `systemctl is-enabled #{service}`
-      systemctl.run("enable #{service}") unless $?.success?
+      unless system("systemctl is-enabled #{service}")
+        systemctl.run("enable #{service}")
+      end
     end
 
     def systemd_start(service)
       systemctl = Helpers::Exec.new('systemctl')
       Msg.p "Search for service #{service}..."
-      `systemctl is-active #{service}`
-      systemctl.run("start #{service}") unless $?.success?
+      unless system("systemctl is-active #{service}")
+        systemctl.run("start #{service}")
+      end
     end
   end
 end

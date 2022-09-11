@@ -59,7 +59,7 @@ module Spior
     end
 
     def previous_copy(target)
-      backup=`ls #{target}.backup-* | head -1`.chomp
+      backup = `ls #{target}.backup-* | head -1`.chomp
       return false unless File.exist? backup
 
       check_hash(backup, target)
@@ -83,7 +83,7 @@ module Spior
 
       sha256conf = Digest::SHA256.file src
       sha256target = Digest::SHA256.file target
-      sha256conf === sha256target
+      sha256conf == sha256target
     end
   end
 end

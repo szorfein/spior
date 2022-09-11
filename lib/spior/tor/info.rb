@@ -39,7 +39,7 @@ module Spior
         pid = ''
         dir = 'DataDirectory /var/lib/tor'
 
-        case Nomansland::distro?
+        case Nomansland.distro?
         when :gentoo
           pid = 'PIDFile /run/tor/tor.pid'
           dir = 'DataDirectory /var/lib/tor/data'
@@ -74,7 +74,7 @@ EOF
       end
 
       def search_uid
-        case Nomansland::distro?
+        case Nomansland.distro?
         when :debian
           `id -u debian-tor`.chomp
         when :ubuntu

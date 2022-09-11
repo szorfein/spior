@@ -8,13 +8,13 @@ module Spior
       banner
       loop do
         Msg.head
-        puts %q{Please select an option:
+        puts 'Please select an option:
 
   1. Redirect traffic through tor
   2. Reload tor and change your ip
   3. Clear and restore your files
   4. Check info on your current ip
-  5. Quit}
+  5. Quit'
 
         puts
         print '>> '
