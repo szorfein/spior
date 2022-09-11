@@ -19,26 +19,26 @@ module Spior
 
           ipt "-t #{table} -F OUTPUT"
           ipt "-t #{table} -A OUTPUT -m state --state ESTABLISHED -j #{target}"
-          ipt "-t #{table} -A OUTPUT -m owner --uid #{@tor.uid} -j #{target}"
+          ipt "-t #{table} -A OUTPUT -m owner --uid #{CONFIG.uid} -j #{target}"
 
-          match_dns_port = @tor.dns
+          match_dns_port = CONFIG.dns_port
           if table == 'nat'
-            target = "REDIRECT --to-ports #{@tor.dns}"
+            target = "REDIRECT --to-ports #{CONFIG.dns_port}"
             match_dns_port = '53'
           end
 
           ipt "-t #{table} -A OUTPUT -p udp --dport #{match_dns_port} -j #{target}"
           ipt "-t #{table} -A OUTPUT -p tcp --dport #{match_dns_port} -j #{target}"
 
-          target = "REDIRECT --to-ports #{@tor.trans_port}" if table == 'nat'
-          ipt "-t #{table} -A OUTPUT -d #{@tor.virt_addr} -p tcp -j #{target}"
+          target = "REDIRECT --to-ports #{CONFIG.trans_port}" if table == 'nat'
+          ipt "-t #{table} -A OUTPUT -d #{CONFIG.virt_addr} -p tcp -j #{target}"
 
           target = 'RETURN' if table == 'nat'
           @non_tor.each { |ip|
             ipt "-t #{table} -A OUTPUT -d #{ip} -j #{target}"
           }
 
-          target = "REDIRECT --to-ports #{@tor.trans_port}" if table == "nat"
+          target = "REDIRECT --to-ports #{CONFIG.trans_port}" if table == 'nat'
           ipt "-t #{table} -A OUTPUT -p tcp -j #{target}"
         end
       end

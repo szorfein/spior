@@ -5,4 +5,4 @@ module Spior
   end
 end
 
-require_relative 'tor/info'
+require_relative 'tor/data'
