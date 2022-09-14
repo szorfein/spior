@@ -12,7 +12,7 @@ module Helpers
     end
 
     def run(args)
-      cmd = @search_uid == '0' ? @name : "sudo #{@name}"
+      cmd = (@search_uid == '0' ? @name : "sudo #{@name}")
       Open3.popen2e("#{cmd} #{args}") do |_, stdout_err, wait_thr|
         while line = stdout_err.gets
           puts line

@@ -25,7 +25,7 @@ module Spior
       # Search value of option_name in the /etc/tor/torrc
       # Return false by default
       def search(option_name)
-        File.open("/etc/tor/torrc") do |f|
+        File.open('/etc/tor/torrc') do |f|
           f.each do |line|
             return Regexp.last_match(1) if line.match(/#{option_name} ([a-z0-9]*)/i)
           end
