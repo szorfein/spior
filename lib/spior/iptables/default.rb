@@ -5,8 +5,8 @@ module Spior
 
     # Default and generic Iptables rules when Tor is not used.
     #
-    # Allow ports:
-    # + Input 22: for ssh connection
+    # Allowed ports:
+    # * Input 22: for ssh connection
     class Default < Iptables::Root
       private
 

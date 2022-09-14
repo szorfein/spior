@@ -1,3 +1,12 @@
+## 0.2.3, release 2022-XX-XX
+* Start documenting code.
+* `spior --reload` make a new IP each time it called, rewrite services.
+* Spior can be configured with `Spior::CONFIG` if used as library.
+* Spior look variables from the `/etc/tor/torrc` and use them if any.
+* Add Rubocop style, fix ~250 code reports.
+* Spior no longer change (backup/restore) the configuration file `/etc/tor/torrc`.
+* Certificate update `certs/szorfein.pem`.
+
 ## 0.1.6, release 2021-12-30
 * Make it work for Voidlinux.
 * Add a man page.

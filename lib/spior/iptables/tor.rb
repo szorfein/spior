@@ -2,6 +2,7 @@
 
 module Spior
   module Iptables
+    # Make Local Redirection Through Tor.
     class Tor < Iptables::Root
       def initialize
         super

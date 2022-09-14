@@ -2,7 +2,16 @@
 
 # https://github.com/seattlerb/minitest#running-your-tests-
 require 'rake/testtask'
+require 'rdoc/task'
 require File.dirname(__FILE__) + '/lib/spior/version'
+
+# rake rdoc
+Rake::RDocTask.new('rdoc') do |rdoc|
+  rdoc.title = 'spior'
+  rdoc.options << '--line-numbers'
+  rdoc.main = 'README.md'
+  rdoc.rdoc_files.include 'lib/**/*.rb', 'README.md'
+end
 
 Rake::TestTask.new(:test) do |t|
   t.libs << 'test'
