@@ -39,7 +39,6 @@ module Spior
     end
 
     def list
-      add '/etc/tor/torrc'
       add '/etc/systemd/resolved.conf'
       add '/var/lib/iptables/rules-save' # gentoo
       add '/etc/iptables/iptables.rules' # arch
