@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require_relative 'spior/clear'
 require_relative 'spior/copy'
 require_relative 'spior/dep'
 require_relative 'spior/iptables'
@@ -19,12 +18,12 @@ module Spior
   class Main
     def initialize(argv)
       @argv = argv
-      run
+      x
     end
 
     private
 
-    def run
+    def x
       Msg.banner
 
       options = Options.new(@argv)

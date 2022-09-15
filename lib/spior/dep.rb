@@ -33,7 +33,6 @@ module Spior
         install(n) if !search_dep(n)
       end
       Msg.p 'Dependencies are OK.'
-      exit
     end
 
     def install(name)
