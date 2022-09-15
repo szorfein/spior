@@ -10,7 +10,7 @@
 
 </div>
 
-(Spider|Tor) A tool to make TOR your default gateway.
+(Spider|Tor) A tool to redirect all your local traffic to the [Tor](https://www.torproject.org/) network.
 
 ## Install
 Spior is cryptographically signed, so add my public key (if you haven’t already) as a trusted certificate.
@@ -21,9 +21,14 @@ And install the gem:
 
     $ gem install spior -P MediumSecurity
 
-Or user wide (Spior will use `sudo`)
+Or user wide (Spior will use `sudo`, `doas` will be supported in next release)
 
     $ gem install --user-install spior
+
+## Requirements
+Spior use `iptables` and `tor`, which can be installed with (if your distro is supported):
+
+    $ spior --install
 
 ## Usage
 
@@ -54,3 +59,5 @@ For any questions, comments, feedback or issues, submit a [new issue](https://gi
 ### links
 + https://rubyreferences.github.io/rubyref
 + https://rubystyle.guide/
++ https://gitlab.torproject.org/legacy/trac/-/wikis/doc/TransparentProxy
++ https://github.com/epidemics-scepticism/writing/blob/master/misconception.md

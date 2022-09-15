@@ -2,8 +2,12 @@
 
 module Spior
   module Tor
-    # Generate a config file for Spior
+    # Generate a config file (torrc) for Spior
     class Config
+      # ==== Attributes
+      #
+      # * +filename+ - A reference to a tempfile like filename=Tempfile.new('foo')
+      #
       def initialize(filename)
         @filename = filename
         @content = <<~TORRC
@@ -18,6 +22,8 @@ module Spior
         TORRC
       end
 
+      # Generate a `torrc` compatible file for Spior
+      # Use value from Spior::CONFIG
       def generate
         Msg.p "Generating Tor config to #{@filename.path}..."
         File.write @filename.path, "#{@content}\n"

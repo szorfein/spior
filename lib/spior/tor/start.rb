@@ -7,6 +7,7 @@ module Spior
   module Tor
     module_function
 
+    # start should start the Tor service on your distribution
     def start
       tmp_file = Tempfile.new('torrc')
 

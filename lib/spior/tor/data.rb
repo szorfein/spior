@@ -6,7 +6,17 @@ module Spior
   module Tor
     ##
     # Data
-    # Fill Spior::CONFIG with data on Tor found on /etc/tor/torrc or use default
+    # Fill Spior::CONFIG with data found on `/etc/tor/torrc` or set default.
+    #
+    # ==== Attributes
+    #
+    # * +user+ - Username used by Tor on your distro, e.g 'tor' on Archlinux
+    # * +dns_port+ - Open this port to listen for UDP DNS requests, and resolve them anonymously
+    # * +dns_listen_address+ - Address from the host, default is 127.0.0.1
+    # * +uid+ - The uid value from the user attribute.
+    # * +trans_port+ - Port to open to listen for transparent proxy connections.
+    # * +virt_addr+ - Default use '10.192.0.0/10'.
+    #
     class Data
       attr_accessor :user, :dns_port, :dns_listen_address
       attr_accessor :trans_port, :virt_addr, :uid
