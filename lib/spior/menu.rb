@@ -5,7 +5,6 @@ module Spior
     extend self
 
     def run
-      banner
       loop do
         Msg.head
         puts 'Please select an option:

@@ -5,6 +5,15 @@ require 'rainbow'
 module Msg
   extend self
 
+  def banner
+    puts
+    puts '┏━┓┏━┓╻┏━┓┏━┓'
+    puts '┗━┓┣━┛┃┃ ┃┣┳┛'
+    puts '┗━┛╹  ╹┗━┛╹┗╸'
+    puts
+    # generated with toilet -F crop -f future spior
+  end
+
   def head
     puts Rainbow('------------------------------------------------').cyan
   end

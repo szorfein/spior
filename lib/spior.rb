@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative 'spior/clear'
 require_relative 'spior/copy'
 require_relative 'spior/dep'
@@ -23,13 +25,9 @@ module Spior
     private
 
     def run
-      options = Options.new(@argv)
+      Msg.banner
 
-      if options.install
-        Msg.head
-        Dep.install
-        Copy.new.save
-      end
+      options = Options.new(@argv)
 
       if options.persist
         Persist.enable

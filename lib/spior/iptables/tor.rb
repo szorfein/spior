@@ -12,6 +12,7 @@ module Spior
       private
 
       def redirect
+        Msg.p 'Redirecting local traffic though Tor...'
         @tables.map do |table|
           target = 'ACCEPT'
           target = 'RETURN' if table == 'nat'
