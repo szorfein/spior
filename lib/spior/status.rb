@@ -35,12 +35,11 @@ module Spior
     def self.info
       URI.open('https://ipleak.net/json') do |l|
         hash = JSON.parse l.read
-        puts
-        puts " Current ip  ===>  #{hash['ip']}"
-        puts " Continent   ===>  #{hash['continent_name']}"
-        puts " Timezone    ===>  #{hash['time_zone']}"
+        puts "  Current ip  ===>  #{hash['ip']}"
+        puts "  Continent   ===>  #{hash['continent_name']}"
+        puts "  Timezone    ===>  #{hash['time_zone']}"
       end
-      puts " Status      ===>  #{enable}"
+      puts "  Status      ===>  #{enable}"
     rescue OpenURI::HTTPError => error
       res = error.io
       puts "Fail to join server #{res.status}"

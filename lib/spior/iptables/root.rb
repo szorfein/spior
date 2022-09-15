@@ -9,6 +9,7 @@ module Spior
         @lo      = Interfacez.loopback
         @lo_addr = Interfacez.ipv4_address_of(@lo)
         @i = Helpers::Exec.new('iptables')
+        @debug = false
         Spior::Copy.new.save
       end
 
@@ -24,6 +25,7 @@ module Spior
       end
 
       def stop!
+        Msg.p 'Clearing Iptables rules...'
         ipt '-F'
         ipt '-X'
         ipt '-t nat -F'
@@ -36,7 +38,7 @@ module Spior
 
       def ipt(line)
         @i.run("#{line}")
-        puts "Added - #{@i} #{line}"
+        puts "Added - iptables #{line}" if @debug
       end
 
       def redirect

@@ -2,44 +2,35 @@
 
 module Spior
   module Menu
-    extend self
-
-    def run
-      banner
+    def self.run
       loop do
         Msg.head
         puts 'Please select an option:
 
-  1. Redirect traffic through tor
-  2. Reload tor and change your ip
-  3. Clear and restore your files
-  4. Check info on your current ip
-  5. Quit'
+  1. Redirect traffic through Tor
+  2. Reload Spior and change your IP
+  3. Stop Tor and use a clearnet navigation
+  4. Check info on your current IP
+  5. Install all the dependencies
+  6. Quit'
 
         puts
         print '>> '
         case gets.chomp
         when '1'
-          Spior::Iptables::Tor.new.run!
+          Spior::Service.start
         when '2'
-          Spior::Serice.restart
+          Spior::Service.restart
         when '3'
-          Spior::Clear.all
+          Spior::Service.stop
         when '4'
           Spior::Status.info
         when '5'
+          Spior::Dep.looking
+        else
           exit
         end
       end
-    end
-
-    private
-
-    def banner
-      puts '┏━┓┏━┓╻┏━┓┏━┓'
-      puts '┗━┓┣━┛┃┃ ┃┣┳┛'
-      puts '┗━┛╹  ╹┗━┛╹┗╸'
-      # generated with toilet -F crop -f future spior
     end
   end
 end

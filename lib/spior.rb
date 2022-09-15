@@ -1,4 +1,5 @@
-require_relative 'spior/clear'
+# frozen_string_literal: true
+
 require_relative 'spior/copy'
 require_relative 'spior/dep'
 require_relative 'spior/iptables'
@@ -25,19 +26,15 @@ module Spior
   class Main
     def initialize(argv)
       @argv = argv
-      run
+      x
     end
 
     private
 
-    def run
-      options = Options.new(@argv)
+    def x
+      Msg.banner
 
-      if options.install
-        Msg.head
-        Dep.install
-        Copy.new.save
-      end
+      options = Options.new(@argv)
 
       if options.persist
         Persist.enable

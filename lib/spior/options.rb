@@ -4,10 +4,9 @@ require 'optparse'
 
 module Spior
   class Options
-    attr_reader :install, :persist
+    attr_reader :persist
 
     def initialize(argv)
-      @install = false
       @persist = false
       parse(argv)
     end
@@ -17,7 +16,7 @@ module Spior
     def parse(argv)
       OptionParser.new do |opts|
         opts.on('-i', '--install', 'Install the dependencies.') do
-          @install = true
+          Spior::Dep.looking
         end
 
         opts.on('-t', '--tor', 'Redirect traffic through TOR.') do

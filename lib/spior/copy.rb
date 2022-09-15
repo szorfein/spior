@@ -42,9 +42,6 @@ module Spior
 
     def list
       add '/etc/systemd/resolved.conf'
-      add '/var/lib/iptables/rules-save' # gentoo
-      add '/etc/iptables/iptables.rules' # arch
-      add '/etc/iptables/rules.v4' # debian
     end
 
     def add(file)
