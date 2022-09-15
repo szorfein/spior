@@ -1,10 +1,15 @@
-## 0.2.3, release 2022-XX-XX
+## 0.2.8, release 2022-09-15
+* Spior used with `--clearnet` try to restore iptables rules found on your system, e.g: `/etc/iptables/iptables.rules` and `/etc/iptables/iptables.rules-backup` for Archlinux or use `Spior::Iptables::Default`.
+* Stdout enhanced.
+* Enhance `Spior::Dep` for install the dependencies.
+* Make `Spior::Persist` work for Archlinux.
+* Update `Spior::Menu`.
 * Start documenting code.
-* `spior --reload` make a new IP each time it called, rewrite services.
+* `spior --reload` make a new IP each time it called, `Spior::Service` was rewritten.
 * Spior can be configured with `Spior::CONFIG` if used as library.
-* Spior look variables from the `/etc/tor/torrc` and use them if any.
-* Add Rubocop style, fix ~250 code reports.
-* Spior no longer change (backup/restore) the configuration file `/etc/tor/torrc`.
+* Spior look options from the `/etc/tor/torrc` and use them if any.
+* Add Rubocop style, fix ~300 code reports.
+* Spior no longer backup/restore the file `/etc/tor/torrc`.
 * Certificate update `certs/szorfein.pem`.
 
 ## 0.1.6, release 2021-12-30
