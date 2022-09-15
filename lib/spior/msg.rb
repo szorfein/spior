@@ -3,7 +3,7 @@
 require 'rainbow'
 
 module Msg
-  extend self
+  module_function
 
   def banner
     puts
@@ -27,7 +27,9 @@ module Msg
   end
 
   def info(text)
-    puts Rainbow('-').blue + Rainbow('-').white + Rainbow('-').blue + ' ' + text + ' ' + Rainbow('-').blue + Rainbow('-').white + Rainbow('-').blue
+    print Rainbow('-').blue + Rainbow('-').white + Rainbow('-').blue
+    print " #{text} "
+    print Rainbow('-').blue + Rainbow('-').white + Rainbow('-').blue + "\n"
   end
 
   def report(text)
@@ -35,5 +37,6 @@ module Msg
     info text
     puts 'Please, report this issue at https://github.com/szorfein/spior/issues'
     puts
+    exit 1
   end
 end
