@@ -3,21 +3,25 @@
 require 'nomansland'
 
 module Spior
-
-  # Persist should enable the Tor redirection when you boot your system
-  #
-  # It should use and enable the services:
-  # + tor
-  # + iptables-restore
-  module Persist
+  module Service
     extend self
 
+    # enable the Tor redirection when you boot your system
+    #
+    # It should use and enable the services:
+    # + tor
+    # + iptables
     def enable
       case Nomansland.distro?
       when :gentoo
         for_gentoo
+      when :archlinux
+        Iptables::Rules.new.backup
+        Tor::Config.new(Tempfile.new('torrc')).backup
+        Helpers::Exec.new('systemctl').run('enable iptables tor')
+        Msg.p 'Services enabled for Archlinux...'
       else
-        Msg.p 'Your distro is not yet supported.'
+        Msg.report 'Your distro is not yet supported.'
       end
     end
 

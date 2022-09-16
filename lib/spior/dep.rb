@@ -4,7 +4,6 @@ require 'nomansland'
 require 'tty-which'
 
 module Spior
-
   # Dep: install all dependencies for Spior
   module Dep
     extend self
@@ -32,24 +31,24 @@ module Spior
 
     def installing_deps(names)
       names.map do |n|
-        install(n) if !search_dep(n)
+        install(n) unless search_dep(n)
       end
       Msg.p 'Dependencies are OK.'
     end
 
     def install(name)
-      Msg.p "Installing #{n}..."
+      Msg.p "Installing #{name}..."
       case Nomansland.installer?
       when :apt_get
-        Helpers::Exec.new('apt-get').run("install #{n}")
+        Helpers::Exec.new('apt-get').run("install #{name}")
       when :emerge
-        Helpers::Exec.new('emerge').run("-av #{n}")
+        Helpers::Exec.new('emerge').run("-av #{name}")
       when :pacman
-        Helpers::Exec.new('pacman').run("-S #{n}")
+        Helpers::Exec.new('pacman').run("-S #{name}")
       when :void
-        Helpers::Exec.new('xbps-install').run("-y #{n}")
+        Helpers::Exec.new('xbps-install').run("-y #{name}")
       when :yum
-        Helpers::Exec.new('yum').run("install #{n}")
+        Helpers::Exec.new('yum').run("install #{name}")
       end
     end
 

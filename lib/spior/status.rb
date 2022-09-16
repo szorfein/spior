@@ -4,12 +4,10 @@ require 'open-uri'
 require 'json'
 
 module Spior
-
   # Status display information on your current IP addresse
   #
   # If you use an IPV6 address, it should fail to display a Tor IP...
   module Status
-
     # Check on https://check.torproject.org/api/ip if Tor is enable or not
     # and display the result.
     def self.enable

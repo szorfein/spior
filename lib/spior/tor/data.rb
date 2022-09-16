@@ -12,32 +12,29 @@ module Spior
     #
     # * +user+ - Username used by Tor on your distro, e.g 'tor' on Archlinux
     # * +dns_port+ - Open this port to listen for UDP DNS requests, and resolve them anonymously
-    # * +dns_listen_address+ - Address from the host, default is 127.0.0.1
     # * +uid+ - The uid value from the user attribute.
     # * +trans_port+ - Port to open to listen for transparent proxy connections.
     # * +virt_addr+ - Default use '10.192.0.0/10'.
     #
     class Data
-      attr_accessor :user, :dns_port, :dns_listen_address
-      attr_accessor :trans_port, :virt_addr, :uid
+      attr_accessor :user, :dns_port, :trans_port, :virt_addr, :uid
 
       def initialize
         @user = search('User') || 'tor'
         @dns_port = search('DNSPort') || '9061'
-        @dns_listen_address = search('DNSListenAddress') || '127.0.0.1'
         @trans_port = search('TransPort') || '9040'
         @virt_addr = search('VirtualAddrNetworkIPv4') || '10.192.0.0/10'
         @uid = search_uid || 0
       end
 
       private
-      
+
       # Search value of option_name in the /etc/tor/torrc
       # Return false by default
       def search(option_name)
         File.open('/etc/tor/torrc') do |f|
           f.each do |line|
-            return Regexp.last_match(1) if line.match(/#{option_name} ([a-z0-9]*)/i)
+            return Regexp.last_match(1) if line.match(/#{option_name} ([a-z0-9.\/]*)/i)
           end
         end
         false

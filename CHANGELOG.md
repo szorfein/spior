@@ -1,4 +1,4 @@
-## 0.2.8, release 2022-09-15
+## 0.2.8, release 2022-09-16
 * Spior used with `--clearnet` try to restore iptables rules found on your system, e.g: `/etc/iptables/iptables.rules` and `/etc/iptables/iptables.rules-backup` for Archlinux or use `Spior::Iptables::Default`.
 * Stdout enhanced.
 * Enhance `Spior::Dep` for install the dependencies.

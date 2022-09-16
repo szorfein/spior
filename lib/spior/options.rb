@@ -4,10 +4,7 @@ require 'optparse'
 
 module Spior
   class Options
-    attr_reader :persist
-
     def initialize(argv)
-      @persist = false
       parse(argv)
     end
 
@@ -38,7 +35,7 @@ module Spior
         end
 
         opts.on('-p', '--persist', 'Active Spior at every boot.') do
-          @persist = true
+          Spior::Service.enable
         end
 
         opts.on('-m', '--menu', 'Display an interactive menu.') do
