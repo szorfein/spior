@@ -14,7 +14,7 @@ module Spior
       Tor::Config.new(tmp_file).generate
 
       # Use Kernel.spawn here
-      x("tor -f #{tmp_file.path}")
+      x("tor -f #{tmp_file.path}") unless File.zero? tmp_file.path
 
       case Nomansland.init?
       when :systemd
@@ -41,10 +41,10 @@ module Spior
 
     def start_runit
       Msg.p 'Starting Tor with Runit...'
-      unless File.exist? '/var/service/tor'
-        Helpers::Exec.new('ln').run('-s /etc/sv/tor /var/service/tor')
-      else
+      if File.exist? '/var/service/tor'
         Helpers::Exec.new('sv').run('start tor')
+      else
+        Helpers::Exec.new('ln').run('-s /etc/sv/tor /var/service/tor')
       end
     end
 
@@ -52,7 +52,7 @@ module Spior
 
     def x(arg)
       auth = (Process::Sys.getuid == '0' ? '' : 'sudo')
-      pid = spawn("#{auth} #{arg}", :out => '/dev/null') or raise 'Error'
+      pid = spawn("#{auth} #{arg}", out: '/dev/null') or raise 'Error'
       Process.wait pid
     end
   end

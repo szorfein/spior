@@ -10,7 +10,6 @@ module Spior
         @lo_addr = Interfacez.ipv4_address_of(@lo)
         @i = Helpers::Exec.new('iptables')
         @debug = false
-        Spior::Copy.new.save
       end
 
       def run!
@@ -41,17 +40,13 @@ module Spior
         puts "Added - iptables #{line}" if @debug
       end
 
-      def redirect
-      end
+      def redirect; end
 
-      def input
-      end
+      def input; end
 
-      def output
-      end
+      def output; end
 
-      def all
-      end
+      def all; end
 
       def bogus_tcp_flags
         ipt '-t mangle -A PREROUTING -p tcp --tcp-flags FIN,SYN,RST,PSH,ACK,URG NONE -j DROP'

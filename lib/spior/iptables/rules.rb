@@ -7,7 +7,6 @@ require 'nomansland'
 module Spior
   module Iptables
     class Rules
-
       def initialize
         @tmp_iptables_rules = Tempfile.new('iptables_rules')
         @tmp_spior_rules = Tempfile.new('spior_rules')
@@ -21,7 +20,7 @@ module Spior
       end
 
       def restore
-        if !restoring_older_rules(@rules_path)
+        unless restoring_older_rules(@rules_path)
           Msg.p 'Adding clearnet navigation...'
           Iptables::Default.new.run!
         end
@@ -30,7 +29,7 @@ module Spior
       protected
 
       def save_rules(tmp_file)
-        Msg.p "Saving Iptables rules to #{tmp_file.path}..."
+        Msg.p 'Saving Iptables rules...'
         Helpers::Exec.new('iptables-save').run("> #{tmp_file.path}")
       end
 
@@ -62,28 +61,23 @@ module Spior
         if File.exist? dest
           if search_for_comment(dest)
             Msg.p "Older Spior rules found #{dest}, erasing..."
-            move(tmpfile.path, dest)
           else
             Msg.p "File exist #{dest}, create backup #{dest}-backup..."
             move(dest, "#{dest}-backup")
-            move(tmpfile.path, dest)
           end
-        else
-          Msg.p "Creating new file #{dest}..."
-          move(tmpfile.path, dest)
         end
+        move(tmpfile.path, dest)
       end
 
       def restoring_older_rules(filename)
         files = %W[#{filename} #{filename}-backup]
         files.each do |f|
-          if File.exist? f
-            if !search_for_comment(f)
-              Iptables::Root.new.stop!
-              Msg.p "Found older rules #{f}, restoring..."
-              Helpers::Exec.new('iptables-restore').run(@rules_path)
-              return true
-            end
+          next unless File.exist? f
+          unless search_for_comment(f)
+            Iptables::Root.new.stop!
+            Msg.p "Found older rules #{f}, restoring..."
+            Helpers::Exec.new('iptables-restore').run(f)
+            return true
           end
         end
         false
