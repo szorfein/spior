@@ -4,10 +4,9 @@ module Spior
   module Service
     module_function
 
-    def restart
-      Service.stop
-      Service.start
-      Msg.p 'ip changed.'
+    def stop
+      Tor.stop
+      Iptables::Rules.new.restore
     end
   end
 end
