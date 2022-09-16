@@ -73,6 +73,7 @@ module Spior
         files = %W[#{filename} #{filename}-backup]
         files.each do |f|
           next unless File.exist? f
+
           unless search_for_comment(f)
             Iptables::Root.new.stop!
             Msg.p "Found older rules #{f}, restoring..."

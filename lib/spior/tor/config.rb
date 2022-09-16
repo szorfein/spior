@@ -78,18 +78,22 @@ module Spior
 
       # Permission for Archlinux on a torrc are chmod 644, chown root:root
       def fix_perm(file)
-        Process::Sys.getuid == '0' ?
-          file.chown(0, 0) :
+        if Process::Sys.getuid == '0'
+          file.chown(0, 0)
+        else
           Helpers::Exec.new('chown').run("root:root #{file}")
+        end
       end
 
       def move(src, dest)
         return if digest_match? src, dest
 
         fix_perm(@filename.path)
-        Process::Sys.getuid == '0' ?
-          FileUtils.mv(src, dest) :
+        if Process::Sys.getuid == '0'
+          FileUtils.mv(src, dest)
+        else
           Helpers::Exec.new('mv').run("#{src} #{dest}")
+        end
       end
     end
   end

@@ -7,7 +7,6 @@ module Spior
     # Allowed ports:
     # * Input 22: for ssh connection
     class Default < Iptables::Root
-
       private
 
       def input
