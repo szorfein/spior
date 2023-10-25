@@ -23,7 +23,7 @@ module Spior
         generate_content(@content)
         return if @content.length == 4
 
-        File.write @filename.path, @content.join("\n") + "\n"
+        File.write @filename.path, "#{@content.join('\n')}\n"
         Msg.p 'Generating Tor config...'
       end
 
@@ -34,7 +34,7 @@ module Spior
         outfile = File.open(@filename.path, 'w')
         outfile.puts(File.read('/etc/tor/torrc'))
         outfile.puts(@content_torrc.join("\n")) if @content_torrc != []
-        outfile.chmod(0644)
+        outfile.chmod(644)
         outfile.close
 
         Msg.p 'Saving Tor options...'
@@ -65,9 +65,9 @@ module Spior
       def adding(content, option)
         o = option.split(' ')
         all = o[1..o.length].join(' ')
-        unless search(o[0])
-          content << "#{o[0]} #{all}"
-        end
+        return if search(o[0])
+
+        content << "#{o[0]} #{all}"
       end
 
       def digest_match?(src, dest)
