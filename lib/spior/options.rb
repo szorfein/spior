@@ -3,6 +3,7 @@
 require 'optparse'
 
 module Spior
+  # Options for the CLI
   class Options
     def initialize(argv)
       parse(argv)
@@ -13,33 +14,33 @@ module Spior
     def parse(argv)
       OptionParser.new do |opts|
         opts.on('-i', '--install', 'Install the dependencies.') do
-          Spior::Dep.looking
+          Dep.looking
         end
 
         opts.on('-t', '--tor', 'Redirect traffic through TOR.') do
-          Spior::Service.start
+          Service.start
         end
 
         opts.on('-r', '--reload', 'Reload TOR to change your IP.') do
-          Spior::Service.restart
+          Service.restart
           exit
         end
 
         opts.on('-c', '--clearnet', 'Reset iptables and return to clearnet navigation.') do
-          Spior::Service.stop
+          Service.stop
         end
 
         opts.on('-s', '--status', 'Look infos about your current IP.') do
-          Spior::Status.info
+          Status.info
           exit
         end
 
         opts.on('-p', '--persist', 'Active Spior at every boot.') do
-          Spior::Service.enable
+          Service::Enable.new
         end
 
         opts.on('-m', '--menu', 'Display an interactive menu.') do
-          Spior::Menu.run
+          Menu.run
         end
 
         opts.on('-h', '--help', 'Show this message.') do

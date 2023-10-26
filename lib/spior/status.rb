@@ -17,8 +17,8 @@ module Spior
         status = 'Enable' if hash['IsTor'] == true
       end
       status
-    rescue OpenURI::HTTPError => error
-      res = error.io
+    rescue OpenURI::HTTPError => e
+      res = e.io
       puts "Fail to join server #{res.status}"
     end
 
@@ -38,8 +38,8 @@ module Spior
         puts "  Timezone    ===>  #{hash['time_zone']}"
       end
       puts "  Status      ===>  #{enable}"
-    rescue OpenURI::HTTPError => error
-      res = error.io
+    rescue OpenURI::HTTPError => e
+      res = e.io
       puts "Fail to join server #{res.status}"
     end
   end

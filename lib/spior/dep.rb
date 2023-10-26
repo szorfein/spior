@@ -6,38 +6,31 @@ require 'tty-which'
 module Spior
   # Dep: install all dependencies for Spior
   module Dep
-    extend self
+    module_function
 
     def looking
       case Nomansland.distro?
       when :archlinux
-        Msg.p 'Looking dependencies for Archlinux...'
-        installing_deps(%w[iptables tor])
+        installing_deps('Arch', %w[iptables tor])
       when :debian
-        Msg.p 'Looking dependencies for Debian...'
-        installing_deps(%w[iptables tor])
+        installing_deps('Debian', %w[iptables tor])
       when :gentoo
-        Msg.p 'Looking dependencies for Gentoo...'
-        installing_deps(%w[iptables tor])
+        installing_deps('Gentoo', %w[iptables tor])
       when :void
-        Msg.p 'Looking dependencies for Voidlinux...'
-        installing_deps(%w[iptables tor])
+        installing_deps('Void', %w[iptables tor])
       else
         Msg.report 'Install for your distro is not yet supported.'
       end
     end
 
-    protected
-
-    def installing_deps(names)
+    def installing_deps(distro, names)
       names.map do |n|
+        Msg.p "Search #{n} for #{distro}..."
         install(n) unless search_dep(n)
       end
-      Msg.p 'Dependencies are OK.'
     end
 
     def install(name)
-      Msg.p "Installing #{name}..."
       case Nomansland.installer?
       when :apt_get
         Helpers::Exec.new('apt-get').run("install #{name}")
