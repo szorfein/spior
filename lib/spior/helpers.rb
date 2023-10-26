@@ -5,6 +5,7 @@ require 'tempfile'
 require 'open3'
 
 module Helpers
+  # Execute program using sudo when permission is required
   class Exec
     def initialize(name)
       @search_uid = Process::Sys.getuid
@@ -14,14 +15,10 @@ module Helpers
     def run(args)
       cmd = (@search_uid == '0' ? @name : "sudo #{@name}")
       Open3.popen2e("#{cmd} #{args}") do |_, stdout_err, wait_thr|
-        while line = stdout_err.gets
-          puts line
-        end
+        puts stdout_err.gets while stdout_err.gets
 
         exit_status = wait_thr.value
-        unless exit_status.success?
-          raise "Error, Running #{cmd} #{args}"
-        end
+        raise "Error, Running #{cmd} #{args}" unless exit_status.success?
       end
     end
   end

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module Spior
+  # Build an interactive menu for spior
   module Menu
     def self.run
       loop do
@@ -18,15 +19,15 @@ module Spior
         print '>> '
         case gets.chomp
         when '1'
-          Spior::Service.start
+          Service.start
         when '2'
-          Spior::Service.restart
+          Service.restart
         when '3'
-          Spior::Service.stop
+          Service.stop
         when '4'
-          Spior::Status.info
+          Status.info
         when '5'
-          Spior::Dep.looking
+          Dep.looking
         else
           exit
         end
