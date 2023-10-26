@@ -7,13 +7,6 @@ module Spior
     # It also kill previous instance run by Spior
     class Stop
       def initialize
-        old_pid = `pgrep -f "tor -f /tmp/torrc*"`.chomp
-
-        if old_pid != ''
-          Msg.p "Found old pid > #{old_pid}, killing it..."
-          Helpers::Exec.new('kill').run("-9 #{old_pid}")
-        end
-
         nomansland
       end
 
