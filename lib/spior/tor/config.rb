@@ -106,7 +106,7 @@ module Spior
       end
 
       def digest_match?(src, dest)
-        return unless File.exist?(dest)
+        return unless File.exist?(dest) && File.readable?(dest)
 
         md5_src = Digest::MD5.file src
         md5_dest = Digest::MD5.file dest

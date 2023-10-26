@@ -43,6 +43,8 @@ module Spior
       end
 
       def search_for_comment(filename)
+        return unless File.exist? filename
+
         File.open(filename) do |f|
           f.each do |line|
             return true if line.match(/saved by Spior/)
@@ -88,7 +90,7 @@ module Spior
 
       def search_iptables_config
         case Nomansland.distro?
-        when :archlinux || :void
+        when :archlinux && :void
           '/etc/iptables/iptables.rules'
         when :debian
           '/etc/iptables.up.rules'
