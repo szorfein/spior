@@ -4,6 +4,7 @@ require 'interfacez'
 
 module Spior
   module Iptables
+    # Base class for iptables
     class Root
       def initialize
         @lo      = Interfacez.loopback
@@ -36,7 +37,7 @@ module Spior
       private
 
       def ipt(line)
-        @i.run("#{line}")
+        @i.run(line.to_s)
         puts "Added - iptables #{line}" if @debug
       end
 

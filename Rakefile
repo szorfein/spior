@@ -3,7 +3,7 @@
 # https://github.com/seattlerb/minitest#running-your-tests-
 require 'rake/testtask'
 require 'rdoc/task'
-require File.dirname(__FILE__) + '/lib/spior/version'
+require "#{File.dirname(__FILE__)}/lib/spior/version"
 
 # rake rdoc
 Rake::RDocTask.new('rdoc') do |rdoc|

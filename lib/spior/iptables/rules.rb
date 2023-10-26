@@ -6,24 +6,26 @@ require 'nomansland'
 
 module Spior
   module Iptables
+    # Iptables::Rules, used to save or restore iptables rules
     class Rules
       def initialize
         @tmp_iptables_rules = Tempfile.new('iptables_rules')
         @tmp_spior_rules = Tempfile.new('spior_rules')
-        @rules_path = search_iptables_config
+        @save_path = search_iptables_config
       end
 
-      def backup
+      def save
         save_rules(@tmp_iptables_rules)
         insert_comment(@tmp_spior_rules, @tmp_iptables_rules)
-        create_file(@tmp_spior_rules, @rules_path)
+        create_file(@tmp_spior_rules, @save_path)
+        Msg.p "Iptables rules saved at #{@save_path}"
       end
 
       def restore
-        unless restoring_older_rules(@rules_path)
-          Msg.p 'Adding clearnet navigation...'
-          Iptables::Default.new.run!
-        end
+        return if restoring_older_rules(@save_path)
+
+        Msg.p 'Adding clearnet navigation...'
+        Iptables::Default.new.run!
       end
 
       protected
@@ -70,16 +72,14 @@ module Spior
       end
 
       def restoring_older_rules(filename)
-        files = %W[#{filename} #{filename}-backup]
+        files = %W[#{filename}-backup #{filename}]
         files.each do |f|
-          next unless File.exist? f
+          next unless File.exist?(f) || search_for_comment(f)
 
-          unless search_for_comment(f)
-            Iptables::Root.new.stop!
-            Msg.p "Found older rules #{f}, restoring..."
-            Helpers::Exec.new('iptables-restore').run(f)
-            return true
-          end
+          Iptables::Root.new.stop!
+          Msg.p "Found older rules #{f}, restoring..."
+          Helpers::Exec.new('iptables-restore').run(f)
+          return true
         end
         false
       end

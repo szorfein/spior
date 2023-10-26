@@ -35,9 +35,7 @@ module Spior
           ipt "-t #{table} -A OUTPUT -d #{CONFIG.virt_addr} -p tcp -j #{target}"
 
           target = 'RETURN' if table == 'nat'
-          @non_tor.each { |ip|
-            ipt "-t #{table} -A OUTPUT -d #{ip} -j #{target}"
-          }
+          @non_tor.each { |ip| ipt "-t #{table} -A OUTPUT -d #{ip} -j #{target}" }
 
           target = "REDIRECT --to-ports #{CONFIG.trans_port}" if table == 'nat'
           ipt "-t #{table} -A OUTPUT -p tcp -j #{target}"

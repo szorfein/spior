@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module Spior
-
   # The module Tor interract with Tor on your system.
   module Tor
   end

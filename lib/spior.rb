@@ -9,6 +9,7 @@ require_relative 'spior/tor'
 require_relative 'spior/menu'
 require_relative 'spior/service'
 require_relative 'spior/helpers'
+require_relative 'spior/ipv6'
 
 module Spior
   # Contain value of Tor::Data
@@ -21,6 +22,7 @@ module Spior
   #   Spior::CONFIG.virt_addr = '10.192.0.0/10'
   CONFIG = Tor::Data.new
 
+  # Main for the CLI
   class Main
     def initialize(argv)
       @argv = argv

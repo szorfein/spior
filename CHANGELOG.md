@@ -1,3 +1,10 @@
+## 0.3.5, release 2023-10-26
+* Better code style, only 11 alerts from rubocop.
+* spior -t also block ipv6 traffic, no need to reboot.
+* Config is written at /etc/torrc.d/spior.conf and loaded with the native daemon.
+* Only '%include /etc/torrc.d/*.conf' is now added to /etc/tor/torrc.
+* Certificate update `certs/szorfein.pem`.
+
 ## 0.2.8, release 2022-09-16
 * Spior used with `--clearnet` try to restore iptables rules found on your system, e.g: `/etc/iptables/iptables.rules` and `/etc/iptables/iptables.rules-backup` for Archlinux or use `Spior::Iptables::Default`.
 * Stdout enhanced.
