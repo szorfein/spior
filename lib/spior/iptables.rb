@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module Spior
+  # Interact with iptables
   module Iptables
   end
 end

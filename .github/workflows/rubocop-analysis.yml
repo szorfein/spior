@@ -3,10 +3,10 @@ name: "Rubocop"
 
 on:
   push:
-    branches: [ develop ]
+    branches: [ devel ]
   pull_request:
     # The branches below must be a subset of the branches above
-    branches: [ develop ]
+    branches: [ devel ]
   schedule:
     - cron: '42 4 * * 6'
 

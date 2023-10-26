@@ -72,7 +72,7 @@ module Spior
       end
 
       def restoring_older_rules(filename)
-        files = %W[#{filename} #{filename}-backup]
+        files = %W[#{filename}-backup #{filename}]
         files.each do |f|
           next unless File.exist?(f) || search_for_comment(f)
 
