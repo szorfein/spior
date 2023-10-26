@@ -8,6 +8,7 @@ module Spior
     def stop(clean: true)
       Tor::Stop.new
       Iptables::Rules.new.restore if clean
+      Ipv6.new.allow if clean
     end
   end
 end

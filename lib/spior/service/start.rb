@@ -10,6 +10,7 @@ module Spior
     def start
       Tor::Start.new
       Iptables::Tor.new.run!
+      Ipv6.new.block
     end
   end
 end

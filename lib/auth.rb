@@ -15,6 +15,12 @@ class Auth
     x("mkdir -p #{path}")
   end
 
+  def sysctl(flag, value)
+    return if flag.nil?
+
+    x("sysctl -w #{flag}=#{value}")
+  end
+
   protected
 
   def search_app

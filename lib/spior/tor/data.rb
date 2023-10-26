@@ -34,7 +34,7 @@ module Spior
       def search(option_name)
         File.open('/etc/tor/torrc') do |f|
           f.each do |line|
-            return Regexp.last_match(1) if line.match(/#{option_name} ([a-z0-9.\/]*)/i)
+            return Regexp.last_match(1) if line.match(%r{#{option_name} ([a-z0-9./]*)}i)
           end
         end
         false
