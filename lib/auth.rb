@@ -10,7 +10,7 @@ class Auth
   end
 
   def mkdir(path)
-    return unless File.exist?(path)
+    return if File.exist?(path)
 
     x("mkdir -p #{path}")
   end
