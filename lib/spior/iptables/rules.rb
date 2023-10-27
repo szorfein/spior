@@ -80,7 +80,9 @@ module Spior
 
           Iptables::Root.new.stop!
           Msg.p "Found older rules #{f}, restoring..."
-          Helpers::Exec.new('iptables-restore').run(f)
+          Helpers::Exec.new('cp').run("#{f} #{@save_path}")
+          Helpers::Exec.new('iptables-restore').run(@save_path)
+
           return true
         end
         false

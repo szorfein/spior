@@ -54,6 +54,16 @@ Return to clearnet navigation
 
 ## Left Over
 
+### Troubleshoooting
+When you enable the `--persist` mode, Spior try to block ipv6 with sysctl. It can fail on some system, so you may need to manually disable ipv6 via kernel argument.  
+An exemple with GRUB, edit `/etc/default/grub.cfg` and change the line bellow:
+
+```
+GRUB_CMDLINE_LINUX_DEFAULT="ipv6.disable=1 quiet"
+```
+
+Recompile the initrd after that and it should be good.
+
 ### Issues
 For any questions, comments, feedback or issues, submit a [new issue](https://github.com/szorfein/spior/issues/new).
 
