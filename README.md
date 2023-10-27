@@ -4,7 +4,7 @@
 <br/>
 
 [![Gem Version](https://badge.fury.io/rb/spior.svg)](https://badge.fury.io/rb/spior)
-![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/szorfein/spior/Rubocop/develop)
+![GitHub Workflow Status (branch)](https://img.shields.io/github/workflow/status/szorfein/spior/Rubocop/devel)
 [![Ruby Style Guide](https://img.shields.io/badge/code_style-rubocop-brightgreen.svg)](https://github.com/rubocop/rubocop)
 ![GitHub](https://img.shields.io/github/license/szorfein/spior)
 
@@ -53,6 +53,16 @@ Return to clearnet navigation
     $ spior --clearnet
 
 ## Left Over
+
+### Troubleshoooting
+When you enable the `--persist` mode, Spior try to block ipv6 with sysctl. It can fail on some system, so you may need to manually disable ipv6 via kernel argument.  
+An exemple with GRUB, edit `/etc/default/grub.cfg` and change the line bellow:
+
+```
+GRUB_CMDLINE_LINUX_DEFAULT="ipv6.disable=1 quiet"
+```
+
+Recompile the initrd after that and it should be good.
 
 ### Issues
 For any questions, comments, feedback or issues, submit a [new issue](https://github.com/szorfein/spior/issues/new).

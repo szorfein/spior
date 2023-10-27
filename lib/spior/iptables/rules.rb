@@ -43,7 +43,7 @@ module Spior
       end
 
       def search_for_comment(filename)
-        return unless File.exist? filename
+        return false unless File.exist? filename
 
         File.open(filename) do |f|
           f.each do |line|
@@ -74,13 +74,15 @@ module Spior
       end
 
       def restoring_older_rules(filename)
-        files = %W[#{filename}-backup #{filename}]
+        files = %W[#{filename}-backup /etc/iptables/simple_firewall.rules #{filename}]
         files.each do |f|
           next unless File.exist?(f) || search_for_comment(f)
 
           Iptables::Root.new.stop!
           Msg.p "Found older rules #{f}, restoring..."
-          Helpers::Exec.new('iptables-restore').run(f)
+          Helpers::Exec.new('cp').run("#{f} #{@save_path}")
+          Helpers::Exec.new('iptables-restore').run(@save_path)
+
           return true
         end
         false
@@ -90,7 +92,9 @@ module Spior
 
       def search_iptables_config
         case Nomansland.distro?
-        when :archlinux && :void
+        when :archlinux
+          '/etc/iptables/iptables.rules'
+        when :void
           '/etc/iptables/iptables.rules'
         when :debian
           '/etc/iptables.up.rules'

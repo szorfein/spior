@@ -1,3 +1,9 @@
+## 0.3.7, release 2023-10-27
+* Persist mode may require manual intervention to work, look the [readme](https://github.com/szorfein/spior/tree/master#left-over)
+* Persist and runtime corrected on Voidlinux.
+* Spior check the presence of 'simple_firewall.rules' when you use the --clearnet
+* Create a `/etc/sysctl.d/40-ipv6.conf` with the persist mode in order to block ipv6 at boot.
+
 ## 0.3.5, release 2023-10-26
 * Better code style, only 11 alerts from rubocop.
 * spior -t also block ipv6 traffic, no need to reboot.
