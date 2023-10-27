@@ -10,7 +10,7 @@ class Auth
   end
 
   def mkdir(path)
-    return if File.exist?(path)
+    return if Dir.exist?(path)
 
     x("mkdir -p #{path}")
   end
@@ -19,6 +19,12 @@ class Auth
     return if flag.nil?
 
     x("sysctl -w #{flag}=#{value}")
+  end
+
+  def write(content, file)
+    temp = Tempfile.new
+    File.write(temp.path, "#{content}\n")
+    x("cp #{temp.path} #{file}")
   end
 
   protected

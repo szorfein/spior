@@ -43,7 +43,7 @@ module Spior
       end
 
       def search_for_comment(filename)
-        return unless File.exist? filename
+        return false unless File.exist? filename
 
         File.open(filename) do |f|
           f.each do |line|
@@ -74,7 +74,7 @@ module Spior
       end
 
       def restoring_older_rules(filename)
-        files = %W[#{filename}-backup #{filename}]
+        files = %W[#{filename}-backup /etc/iptables/simple_firewall.rules #{filename}]
         files.each do |f|
           next unless File.exist?(f) || search_for_comment(f)
 
@@ -90,7 +90,9 @@ module Spior
 
       def search_iptables_config
         case Nomansland.distro?
-        when :archlinux && :void
+        when :archlinux
+          '/etc/iptables/iptables.rules'
+        when :void
           '/etc/iptables/iptables.rules'
         when :debian
           '/etc/iptables.up.rules'
