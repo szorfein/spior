@@ -21,19 +21,4 @@ module Spior
   #   Spior::CONFIG.user = 'Tor-User-System'
   #   Spior::CONFIG.virt_addr = '10.192.0.0/10'
   CONFIG = Tor::Data.new
-
-  # Main for the CLI
-  class Main
-    def initialize(argv)
-      @argv = argv
-      x
-    end
-
-    private
-
-    def x
-      Msg.banner
-      Options.new(@argv)
-    end
-  end
 end

@@ -5,6 +5,31 @@ require 'tempfile'
 require 'open3'
 
 module Helpers
+  def self.auth?
+    return :root if Process.uid == '0'
+    return :doas if File.exist?('/bin/doas') || File.exist?('/sbin/doas')
+    return :sudo if File.exist?('/bin/sudo') || File.exist?('/sbin/sudo')
+  end
+
+  def self.cmd(command)
+    case auth?
+    when :root
+      syscmd(command)
+    when :doas
+      syscmd("doas #{command}")
+    when :sudo
+      syscmd("sudo #{command}")
+    end
+  end
+
+  def self.syscmd(cmd)
+    Open3.popen2e(cmd) do |_, stdout_err, wait_thr|
+      puts stdout_err.gets while stdout_err.gets
+      exit_status = wait_thr.value
+      raise "Error, Running #{cmd}" unless exit_status.success?
+    end
+  end
+
   # Execute program using sudo when permission is required
   class Exec
     def initialize(name)

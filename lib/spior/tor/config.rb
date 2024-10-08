@@ -64,9 +64,9 @@ module Spior
         return if Dir.exist? @config_dir
 
         if Process::Sys.getuid == '0'
-          File.mkdir @config_dir
+          FileUtils.mkdir_p @config_dir
         else
-          Auth.new.mkdir @config_dir
+          Helpers.cmd("mkdir -p #{@config_dir}")
         end
       end
 
@@ -113,23 +113,14 @@ module Spior
         md5_src == md5_dest
       end
 
-      # Permission for Archlinux on a torrc are chmod 644, chown root:root
-      def fix_perm(file)
-        if Process::Sys.getuid == '0'
-          file.chown(0, 0)
-        else
-          Helpers::Exec.new('chown').run("root:root #{file}")
-        end
-      end
-
       def move(src, dest)
         return if digest_match? src, dest
 
-        fix_perm(@filename.path)
         if Process::Sys.getuid == '0'
           FileUtils.mv(src, dest)
         else
-          Helpers::Exec.new('mv').run("#{src} #{dest}")
+          Helpers.cmd("mv #{src} #{dest}")
+          Helpers.cmd("chown root:root #{dest}")
         end
       end
     end
