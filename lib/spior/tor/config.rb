@@ -32,7 +32,7 @@ module Spior
         cn = @content.join("\n")
         File.write(@filename.path, "#{cn}\n")
         Msg.p "Generating #{@config_spiorrc}..."
-        move(@filename.path, @config_spiorrc)
+        Helpers.mv(@filename.path, @config_spiorrc)
       end
 
       def write_file(content, file, mode = 'a')
@@ -55,7 +55,7 @@ module Spior
         write_file @content_torrc, @filename.path, 'w'
 
         Msg.p 'Saving Tor options...'
-        move(@filename.path, @config_spiorrc)
+        Helpers.mv(@filename.path, @config_spiorrc)
       end
 
       protected
@@ -75,7 +75,7 @@ module Spior
         content = File.read(@config_torrc)
         adding content, "%include #{@config_dir}/*.conf"
         write_file content, temp.path
-        move(temp.path, @config_torrc)
+        Helpers.mv(temp.path, @config_torrc)
       end
 
       def generate_content(content)
@@ -111,17 +111,6 @@ module Spior
         md5_src = Digest::MD5.file src
         md5_dest = Digest::MD5.file dest
         md5_src == md5_dest
-      end
-
-      def move(src, dest)
-        return if digest_match? src, dest
-
-        if Process::Sys.getuid == '0'
-          FileUtils.mv(src, dest)
-        else
-          Helpers.cmd("mv #{src} #{dest}")
-          Helpers.cmd("chown root:root #{dest}")
-        end
       end
     end
   end

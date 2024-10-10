@@ -30,6 +30,14 @@ module Helpers
     end
   end
 
+  def self.mv(src, dest)
+    if Process::Sys.getuid == '0'
+      FileUtils.mv(src, dest)
+    else
+      cmd("mv #{src} #{dest}")
+    end
+  end
+
   # Execute program using sudo when permission is required
   class Exec
     def initialize(name)

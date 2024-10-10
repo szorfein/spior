@@ -10,19 +10,17 @@ module Spior
     class Rules
       def initialize
         @tmp_iptables_rules = Tempfile.new('iptables_rules')
-        @tmp_spior_rules = Tempfile.new('spior_rules')
         @save_path = search_iptables_config
       end
 
       def save
-        save_rules(@tmp_iptables_rules)
-        insert_comment(@tmp_spior_rules, @tmp_iptables_rules)
-        create_file(@tmp_spior_rules, @save_path)
+        Helpers.cmd("iptables-save > #{@tmp_iptables_rules.path}")
+        Helpers.mv(@tmp_iptables_rules.path, @save_path)
         Msg.p "Iptables rules saved at #{@save_path}"
       end
 
       def restore
-        return if restoring_older_rules(@save_path)
+        return if restoring_older_rules
 
         Msg.p 'Adding clearnet navigation...'
         Iptables::Default.new.run!
@@ -30,59 +28,15 @@ module Spior
 
       protected
 
-      def save_rules(tmp_file)
-        Msg.p 'Saving Iptables rules...'
-        Helpers::Exec.new('iptables-save').run("> #{tmp_file.path}")
-      end
-
-      def insert_comment(spior_file, iptable_file)
-        outfile = File.open(spior_file.path, 'w')
-        outfile.puts '# Rules saved by Spior.'
-        outfile.puts(File.read(iptable_file.path))
-        outfile.close
-      end
-
-      def search_for_comment(filename)
-        return false unless File.exist? filename
-
-        File.open(filename) do |f|
-          f.each do |line|
-            return true if line.match(/saved by Spior/)
-          end
-        end
-        false
-      end
-
-      def move(src, dest)
-        if Process::Sys.getuid == '0'
-          FileUtils.mv(src, dest)
-        else
-          Helpers::Exec.new('mv').run("#{src} #{dest}")
-        end
-      end
-
-      def create_file(tmpfile, dest)
-        if File.exist? dest
-          if search_for_comment(dest)
-            Msg.p "Older Spior rules found #{dest}, erasing..."
-          else
-            Msg.p "File exist #{dest}, create backup #{dest}-backup..."
-            move(dest, "#{dest}-backup")
-          end
-        end
-        move(tmpfile.path, dest)
-      end
-
-      def restoring_older_rules(filename)
-        files = %W[#{filename}-backup /etc/iptables/simple_firewall.rules #{filename}]
+      def restoring_older_rules
+        files = %w[/etc/iptables/simple_firewall.rules /usr/share/iptables/simple_firewall.rules]
         files.each do |f|
-          next unless File.exist?(f) || search_for_comment(f)
+          next unless File.exist?(f)
 
           Iptables::Root.new.stop!
           Msg.p "Found older rules #{f}, restoring..."
-          Helpers::Exec.new('cp').run("#{f} #{@save_path}")
-          Helpers::Exec.new('iptables-restore').run(@save_path)
-
+          Helpers.cmd("cp #{f} #{@save_path}")
+          Helpers.cmd("iptables-restore < #{@save_path}")
           return true
         end
         false
@@ -92,16 +46,12 @@ module Spior
 
       def search_iptables_config
         case Nomansland.distro?
-        when :archlinux
-          '/etc/iptables/iptables.rules'
-        when :void
-          '/etc/iptables/iptables.rules'
         when :debian
           '/etc/iptables.up.rules'
         when :gentoo
           '/var/lib/iptables/rules-save'
         else
-          Msg.report 'I don`t know where you distro save the rules for iptables yet'
+          '/etc/iptables/iptables.rules'
         end
       end
     end

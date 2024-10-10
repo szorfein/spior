@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "#{File.dirname(__FILE__)}/lib/spior/version"
+require_relative "lib/spior/version"
 
 Gem::Specification.new do |s|
   s.name = 'spior'

@@ -14,6 +14,7 @@ module Spior
         installing_deps('pacman -S', %w[iptables tor])
       when :debian
         installing_deps('apt-get install', %w[iptables tor])
+        use_iptables
       when :gentoo
         installing_deps('emerge -av', %w[iptables tor])
       when :void
@@ -40,6 +41,14 @@ module Spior
 
     def search_dep(name)
       TTY::Which.exist?(name) ? true : false
+    end
+
+    # https://wiki.debian.org/iptables
+    def use_iptables
+      Helpers.cmd('update-alternatives --set iptables /usr/sbin/iptables-legacy')
+      Helpers.cmd('update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy')
+      Helpers.cmd('update-alternatives --set arptables /usr/sbin/arptables-legacy')
+      Helpers.cmd('update-alternatives --set ebtables /usr/sbin/ebtables-legacy')
     end
   end
 end
