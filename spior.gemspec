@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "#{File.dirname(__FILE__)}/lib/spior/version"
+require_relative "lib/spior/version"
 
 Gem::Specification.new do |s|
   s.name = 'spior'
@@ -31,8 +31,8 @@ Gem::Specification.new do |s|
 
   s.test_files = Dir['test/test_*.rb']
 
-  s.cert_chain = ['certs/szorfein.pem']
-  s.signing_key = File.expand_path('~/.ssh/gem-private_key.pem')
+  #s.cert_chain = ['certs/szorfein.pem']
+  #s.signing_key = File.expand_path('~/.ssh/gem-private_key.pem')
 
   s.requirements << 'tor'
   s.requirements << 'iptables'

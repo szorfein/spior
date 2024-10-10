@@ -10,7 +10,6 @@
 
 </div>
 
-
 (Spider|Tor) A tool to redirect all your local traffic to the [Tor](https://www.torproject.org/) network.
 
 ## Install
@@ -30,6 +29,20 @@ Or user wide (Spior will use `sudo`, `doas` will be supported in next release)
 Spior use `iptables` and `tor`, which can be installed with (if your distro is supported):
 
     $ spior --install
+
+## Configuration
+Spior look the /etc/tor/torrc for any of:
+
+```conf
+DNSPort 9061
+TransPort 9040
+VirtualAddrNetworkIpv4 10.192.0.0/10
+```
+
+You can customize any of theses variables.
+
+When using `spior -c | --clearnet`, if you want Spior load custom iptables rules, place
+them at `/etc/iptables/simple_firewall.rules`.
 
 ## Usage
 
@@ -54,6 +67,7 @@ Return to clearnet navigation
 
 ## Left Over
 
+### [Check for Leak](https://github.com/brainfucksec/kalitorify#checking-for-leaks)
 ### Troubleshoooting
 When you enable the `--persist` mode, Spior try to block ipv6 with sysctl. It can fail on some system, so you may need to manually disable ipv6 via kernel argument.  
 An exemple with GRUB, edit `/etc/default/grub.cfg` and change the line bellow:
@@ -62,13 +76,13 @@ An exemple with GRUB, edit `/etc/default/grub.cfg` and change the line bellow:
 GRUB_CMDLINE_LINUX_DEFAULT="ipv6.disable=1 quiet"
 ```
 
-Recompile the initrd after that and it should be good.
+Reload grub after that `grub-mkconfig -o /boot/grub/grub.cfg`
 
 ### Issues
 For any questions, comments, feedback or issues, submit a [new issue](https://github.com/szorfein/spior/issues/new).
 
 ### links
-+ https://rubyreferences.github.io/rubyref
-+ https://rubystyle.guide/
 + https://gitlab.torproject.org/legacy/trac/-/wikis/doc/TransparentProxy
 + https://github.com/epidemics-scepticism/writing/blob/master/misconception.md
++ [in perl - Nipe](https://github.com/htrgouvea/nipe)
++ [in bash - Kalitorify](https://github.com/brainfucksec/kalitorify)

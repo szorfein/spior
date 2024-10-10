@@ -1,3 +1,12 @@
+## 0.5.0, release 2024-10
+* Correct runtime with openrc on Gentoo
+* Remove a lots of old codes.
+* Correct `root`, `doas` or `sudo` detection.
+* For Debian, enable iptables-legacy instead of nftables, see
+  https://wiki.debian.org/iptables (you need to use `spior -i`).
+* Persist Mode on Debian add a script under /etc/network/if-pre-up.d/iptables
+  like in the doc.
+
 ## 0.3.7, release 2023-10-27
 * Persist mode may require manual intervention to work, look the [readme](https://github.com/szorfein/spior/tree/master#left-over)
 * Persist and runtime corrected on Voidlinux.

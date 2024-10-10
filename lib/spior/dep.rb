@@ -11,42 +11,44 @@ module Spior
     def looking
       case Nomansland.distro?
       when :archlinux
-        installing_deps('Arch', %w[iptables tor])
+        installing_deps('pacman -S', %w[iptables tor])
       when :debian
-        installing_deps('Debian', %w[iptables tor])
+        installing_deps('apt-get install', %w[iptables tor])
+        use_iptables
       when :gentoo
-        installing_deps('Gentoo', %w[iptables tor])
+        installing_deps('emerge -av', %w[iptables tor])
       when :void
-        installing_deps('Void', %w[iptables tor])
+        installing_deps('xbps-install -S', %w[iptables tor])
+      when :fedora
+        installing_deps('dnf install -y', %w[iptables tor])
+      when :suse
+        installing_deps('zypper install -y', %w[iptables tor])
       else
         Msg.report 'Install for your distro is not yet supported.'
       end
     end
 
-    def installing_deps(distro, names)
+    def installing_deps(distro_cmd, names)
       names.map do |n|
-        Msg.p "Search #{n} for #{distro}..."
-        install(n) unless search_dep(n)
+        Msg.p "Search #{n}..."
+        install(distro_cmd, n) unless search_dep(n)
       end
     end
 
-    def install(name)
-      case Nomansland.installer?
-      when :apt_get
-        Helpers::Exec.new('apt-get').run("install #{name}")
-      when :emerge
-        Helpers::Exec.new('emerge').run("-av #{name}")
-      when :pacman
-        Helpers::Exec.new('pacman').run("-S #{name}")
-      when :void
-        Helpers::Exec.new('xbps-install').run("-y #{name}")
-      when :yum
-        Helpers::Exec.new('yum').run("install #{name}")
-      end
+    def install(cmd, package)
+      Helpers.cmd("#{cmd} #{package}")
     end
 
     def search_dep(name)
       TTY::Which.exist?(name) ? true : false
+    end
+
+    # https://wiki.debian.org/iptables
+    def use_iptables
+      Helpers.cmd('update-alternatives --set iptables /usr/sbin/iptables-legacy')
+      Helpers.cmd('update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy')
+      Helpers.cmd('update-alternatives --set arptables /usr/sbin/arptables-legacy')
+      Helpers.cmd('update-alternatives --set ebtables /usr/sbin/ebtables-legacy')
     end
   end
 end

@@ -32,7 +32,7 @@ module Spior
         cn = @content.join("\n")
         File.write(@filename.path, "#{cn}\n")
         Msg.p "Generating #{@config_spiorrc}..."
-        move(@filename.path, @config_spiorrc)
+        Helpers.mv(@filename.path, @config_spiorrc)
       end
 
       def write_file(content, file, mode = 'a')
@@ -55,7 +55,7 @@ module Spior
         write_file @content_torrc, @filename.path, 'w'
 
         Msg.p 'Saving Tor options...'
-        move(@filename.path, @config_spiorrc)
+        Helpers.mv(@filename.path, @config_spiorrc)
       end
 
       protected
@@ -64,9 +64,9 @@ module Spior
         return if Dir.exist? @config_dir
 
         if Process::Sys.getuid == '0'
-          File.mkdir @config_dir
+          FileUtils.mkdir_p @config_dir
         else
-          Auth.new.mkdir @config_dir
+          Helpers.cmd("mkdir -p #{@config_dir}")
         end
       end
 
@@ -75,7 +75,7 @@ module Spior
         content = File.read(@config_torrc)
         adding content, "%include #{@config_dir}/*.conf"
         write_file content, temp.path
-        move(temp.path, @config_torrc)
+        Helpers.mv(temp.path, @config_torrc)
       end
 
       def generate_content(content)
@@ -111,26 +111,6 @@ module Spior
         md5_src = Digest::MD5.file src
         md5_dest = Digest::MD5.file dest
         md5_src == md5_dest
-      end
-
-      # Permission for Archlinux on a torrc are chmod 644, chown root:root
-      def fix_perm(file)
-        if Process::Sys.getuid == '0'
-          file.chown(0, 0)
-        else
-          Helpers::Exec.new('chown').run("root:root #{file}")
-        end
-      end
-
-      def move(src, dest)
-        return if digest_match? src, dest
-
-        fix_perm(@filename.path)
-        if Process::Sys.getuid == '0'
-          FileUtils.mv(src, dest)
-        else
-          Helpers::Exec.new('mv').run("#{src} #{dest}")
-        end
       end
     end
   end

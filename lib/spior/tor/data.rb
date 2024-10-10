@@ -45,6 +45,8 @@ module Spior
         case Nomansland.distro?
         when :debian || :ubuntu
           `id -u debian-tor`.chomp
+        when :fedora
+          `id -u toranon`.chomp
         else
           `id -u #{@user}`.chomp
         end
