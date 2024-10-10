@@ -38,6 +38,8 @@ module Spior
         puts "  Timezone    ===>  #{hash['time_zone']}"
       end
       puts "  Status      ===>  #{enable}"
+    rescue SocketError => e
+      Msg.err e
     rescue OpenURI::HTTPError => e
       res = e.io
       puts "Fail to join server #{res.status}"

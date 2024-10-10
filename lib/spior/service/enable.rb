@@ -41,6 +41,7 @@ module Spior
           Msg.report 'Init no yet supported for start Iptables at boot'
         end
         Ipv6.new.block_persist
+        Msg.p 'Persist enabled for Gentoo...'
       end
 
       def for_arch

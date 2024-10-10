@@ -41,6 +41,9 @@ VirtualAddrNetworkIpv4 10.192.0.0/10
 
 You can customize any of theses variables.
 
+When using `spior -c | --clearnet`, if you want Spior load custom iptables rules, place
+them at `/etc/iptables/simple_firewall.rules`.
+
 ## Usage
 
     $ spior -h
@@ -64,7 +67,7 @@ Return to clearnet navigation
 
 ## Left Over
 
-### [Check for Leak](https://github.com/brainfucksec/kalitorify#checking-for-leaks]
+### [Check for Leak](https://github.com/brainfucksec/kalitorify#checking-for-leaks)
 ### Troubleshoooting
 When you enable the `--persist` mode, Spior try to block ipv6 with sysctl. It can fail on some system, so you may need to manually disable ipv6 via kernel argument.  
 An exemple with GRUB, edit `/etc/default/grub.cfg` and change the line bellow:
@@ -73,7 +76,7 @@ An exemple with GRUB, edit `/etc/default/grub.cfg` and change the line bellow:
 GRUB_CMDLINE_LINUX_DEFAULT="ipv6.disable=1 quiet"
 ```
 
-Recompile the initrd after that and it should be good.
+Reload grub after that `grub-mkconfig -o /boot/grub/grub.cfg`
 
 ### Issues
 For any questions, comments, feedback or issues, submit a [new issue](https://github.com/szorfein/spior/issues/new).

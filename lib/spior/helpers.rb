@@ -23,8 +23,8 @@ module Helpers
   end
 
   def self.syscmd(cmd)
-    Open3.popen2e(cmd) do |_, stdout_err, wait_thr|
-      puts stdout_err.gets while stdout_err.gets
+    Open3.popen2e(cmd) do |_, stdout_and_stderr, wait_thr|
+      puts stdout_and_stderr.gets while stdout_and_stderr.gets
       exit_status = wait_thr.value
       raise "Error, Running #{cmd}" unless exit_status.success?
     end
@@ -41,18 +41,11 @@ module Helpers
   # Execute program using sudo when permission is required
   class Exec
     def initialize(name)
-      @search_uid = Process::Sys.getuid
       @name = name
     end
 
     def run(args)
-      cmd = (@search_uid == '0' ? @name : "sudo #{@name}")
-      Open3.popen2e("#{cmd} #{args}") do |_, stdout_err, wait_thr|
-        puts stdout_err.gets while stdout_err.gets
-
-        exit_status = wait_thr.value
-        raise "Error, Running #{cmd} #{args}" unless exit_status.success?
-      end
+      Helpers.cmd("#{@name} #{args}")
     end
   end
 
