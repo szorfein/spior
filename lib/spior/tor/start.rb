@@ -38,27 +38,21 @@ module Spior
         return if state == 'active'
 
         Msg.p 'Starting Tor with Systemd...'
-        Helpers::Exec.new('systemctl').run('start tor')
+        Helpers.cmd('systemctl start tor')
       end
 
       def start_openrc
         Msg.p 'Starting Tor with OpenRC...'
-        Helpers::Exec.new('/etc/init.d/tor').run('start')
+        Helpers.cmd('/etc/init.d/tor start')
       end
 
       def start_runit
         Msg.p 'Starting Tor with Runit...'
         if File.exist? '/var/service/tor'
-          Helpers::Exec.new('sv').run('start tor')
+          Helpers.cmd('sv start tor')
         else
-          Helpers::Exec.new('ln').run('-s /etc/sv/tor /var/service/tor')
+          Helpers.cmd('ln -s /etc/sv/tor /var/service/tor')
         end
-      end
-
-      def x(arg)
-        auth = (Process::Sys.getuid == '0' ? '' : 'sudo')
-        pid = spawn("#{auth} #{arg}", out: '/dev/null') or raise 'Error'
-        Process.wait pid
       end
     end
   end
