@@ -40,7 +40,7 @@ module Spior
 
         File.open(file, mode) do |f|
           if content.is_a?(Array)
-            f.puts(content.join('\n'))
+            f.puts(content.join("\n"))
           else
             f.puts(content)
           end
