@@ -4,6 +4,7 @@ require 'fileutils'
 require 'tempfile'
 require 'open3'
 
+# Various function for Spior
 module Helpers
   def self.auth?
     return :root if Process.uid == '0'
@@ -33,8 +34,10 @@ module Helpers
   def self.mv(src, dest)
     if Process::Sys.getuid == '0'
       FileUtils.mv(src, dest)
+      FileUtils.chmod 0644, dest
     else
       cmd("mv #{src} #{dest}")
+      cmd("chmod 644 #{dest}")
     end
   end
 

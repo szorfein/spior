@@ -1,3 +1,6 @@
+### Fix
+* config for tor and spior, not enough permission - now fixed at 0644.
+
 ## 0.5.0, release 2024-10
 * Correct runtime with openrc on Gentoo
 * Remove a lots of old codes.
