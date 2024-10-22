@@ -1,4 +1,6 @@
 ### Fix
+* sysctl no more generate blank line.
+* ipv6 - check if ipv6 is alrealy blocked before trying to allow or block.
 * config for tor and spior, not enough permission - now fixed at 0644.
 
 ## 0.5.0, release 2024-10
